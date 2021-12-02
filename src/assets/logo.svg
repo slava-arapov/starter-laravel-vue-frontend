@@ -1,0 +1,10 @@
+<svg id="Layer" data-name="Layer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+    <defs>
+        <style>.cls-1{fill:#1697f6;}.cls-2{fill:#7bc6ff;}.cls-3{fill:#1867c0;}.cls-4{fill:#aeddff;}</style>
+    </defs>
+    <title>Logo</title>
+    <circle class="cls-1" r="40" cx="40" cy="40" />
+    <circle class="cls-2" r="30" cx="40" cy="40" />
+    <circle class="cls-3" r="20" cx="40" cy="40" />
+    <circle class="cls-4" r="10" cx="40" cy="40" />
+</svg>
