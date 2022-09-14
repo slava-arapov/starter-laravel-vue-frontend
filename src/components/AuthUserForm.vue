@@ -1,21 +1,20 @@
 <template>
   <v-card>
-    <validation-observer
-      ref="observer"
-      v-slot="{ invalid }"
+    <Form
+      as="v-form"
+      ref="form"
+      lazy-validation
+      @submit="updateUser"
+      v-slot="{ meta }"
     >
-      <v-form
-        ref="form"
-        lazy-validation
-        @submit.prevent="updateUser"
+      <Field
+        v-model="name"
+        name="name"
+        :rules="nameRules"
+        v-slot="{ field, errors }"
       >
-        <validation-provider
-          v-slot="{ errors }"
-          name="name"
-          :rules="nameRules"
-        >
           <v-text-field
-            v-model="name"
+            v-bind="field"
             label="Name"
             type="text"
             name="name"
@@ -23,14 +22,16 @@
             :error-messages="errors"
             required
           ></v-text-field>
-        </validation-provider>
-        <validation-provider
-          v-slot="{ errors }"
+        </Field>
+
+        <Field
+          v-model="email"
           name="email"
           :rules="emailRules"
+          v-slot="{ field, errors }"
         >
           <v-text-field
-            v-model="email"
+            v-bind="field"
             label="Email"
             type="email"
             name="email"
@@ -38,30 +39,27 @@
             :error-messages="errors"
             required
           ></v-text-field>
-        </validation-provider>
+        </Field>
         <v-btn
           color="info"
           type="submit"
-          :disabled="invalid"
+          :disabled="!meta.valid"
           small
         >
           Update
         </v-btn>
         <FlashMessage :message="message" :error="error" />
-      </v-form>
-    </validation-observer>
+    </Form>
   </v-card>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
-
-setInteractionMode('eager');
+import { Field, Form } from 'vee-validate';
 
 declare interface BaseComponentData {
   name: string | null,
@@ -72,11 +70,11 @@ declare interface BaseComponentData {
   message: string | null
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AuthUserForm',
   components: {
-    ValidationProvider,
-    ValidationObserver,
+    Form,
+    Field,
     FlashMessage
   },
   data(): BaseComponentData {

@@ -1,21 +1,20 @@
 <template>
   <div>
-    <validation-observer
-      ref="observer"
-      v-slot="{ invalid }"
-    >
-      <v-form
+      <Form
+        as="v-form"
         ref="form"
         lazy-validation
-        @submit.prevent="login"
+        @submit="login"
+        v-slot="{ meta }"
       >
-        <validation-provider
-          v-slot="{ errors }"
+        <Field
+          v-model="email"
           name="email"
           :rules="emailRules"
+          v-slot="{ field, errors }"
         >
           <v-text-field
-            v-model="email"
+            v-bind="field"
             label="Email"
             type="email"
             name="email"
@@ -23,22 +22,23 @@
             :error-messages="errors"
             required
           ></v-text-field>
-        </validation-provider>
+        </Field>
 
-        <validation-provider
-          v-slot="{ errors }"
+        <Field
+          v-model="password"
           name="password"
           :rules="passwordRules"
+          v-slot="{ field, errors }"
         >
           <v-text-field
-            v-model="password"
+            v-bind="field"
             label="Password"
             type="password"
             name="password"
             :error-messages="errors"
             required
           ></v-text-field>
-        </validation-provider>
+        </Field>
 
         <div class="d-flex justify-between align-center pt-2">
           <router-link to="/forgot-password" class="text-sm base-link pr-3">
@@ -47,26 +47,23 @@
           <v-btn
             color="info"
             type="submit"
-            :disabled="invalid"
+            :disabled="!meta.valid"
           >
             Login
           </v-btn>
         </div>
 
         <FlashMessage :error="error" />
-      </v-form>
-    </validation-observer>
+      </Form>
   </div>
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import { defineComponent } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
-
-setInteractionMode('eager');
+import { Field, Form } from 'vee-validate';
 
 declare interface BaseComponentData {
   invalid: boolean,
@@ -77,17 +74,11 @@ declare interface BaseComponentData {
   error?: Error | string | string[] | null
 }
 
-export default (Vue as VueConstructor<
-  Vue & {
-  $refs: {
-    observer: InstanceType<typeof ValidationObserver>;
-  };
-}
->).extend({
+export default defineComponent({
   name: 'LoginForm',
   components: {
-    ValidationProvider,
-    ValidationObserver,
+    Form,
+    Field,
     FlashMessage
   },
   data(): BaseComponentData {
@@ -125,7 +116,7 @@ export default (Vue as VueConstructor<
         console.log(error);
 
         if (error.response.data.errors) {
-          this.$refs.observer.setErrors(error.response.data.errors);
+          (this.$refs.form as HTMLFormElement).setErrors(error.response.data.errors);
         } else {
           this.error = getError(error);
         }

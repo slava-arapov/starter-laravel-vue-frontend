@@ -2,22 +2,22 @@
   <v-card
     class="ma-3"
   >
-    <validation-observer
-      ref="observer"
-      v-slot="{ invalid }"
-    >
-      <v-form
+      <Form
+        as="v-form"
         ref="form"
         lazy-validation
-        @submit.prevent="updatePassword">
+        @submit.prevent="updatePassword"
+        v-slot="{ meta }"
+      >
 
-          <validation-provider
-            v-slot="{ errors }"
+          <Field
+            v-model="currentPassword"
             name="current-password"
             :rules="passwordRules"
+            v-slot="{ field, errors }"
           >
             <v-text-field
-              v-model="currentPassword"
+              v-bind="field"
               :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
               label="Current Password"
               :type="showPass ? 'text' : 'password'"
@@ -26,15 +26,16 @@
               required
               @click:append="showPass = !showPass"
             ></v-text-field>
-          </validation-provider>
+          </Field>
 
-          <validation-provider
-            v-slot="{ errors }"
+          <Field
+            v-model="password"
             name="password"
             :rules="passwordRules"
+            v-slot="{ field, errors }"
           >
             <v-text-field
-              v-model="password"
+              v-bind="field"
               :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
               label="Password"
               :type="showPass ? 'text' : 'password'"
@@ -43,15 +44,16 @@
               required
               @click:append="showPass = !showPass"
             ></v-text-field>
-          </validation-provider>
+          </Field>
 
-          <validation-provider
-            v-slot="{ errors }"
+          <Field
+            v-model="passwordConfirm"
             name="confirm-password"
             :rules="passwordRules"
+            v-slot="{ field, errors }"
           >
             <v-text-field
-              v-model="passwordConfirm"
+              v-bind="field"
               :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
               label="Confirm Password"
               :type="showPass ? 'text' : 'password'"
@@ -60,31 +62,28 @@
               required
               @click:append="showPass = !showPass"
             ></v-text-field>
-          </validation-provider>
+          </Field>
 
           <v-btn
             color="info"
             type="submit"
-            :disabled="invalid"
+            :disabled="!meta.valid"
             small
           >
             Update
           </v-btn>
         <FlashMessage :message="message" :error="error" />
-      </v-form>
-    </validation-observer>
+      </Form>
   </v-card>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+import { Form, Field } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
-
-setInteractionMode('eager');
 
 declare interface BaseComponentData {
   mdiIcons: Record<string, string>,
@@ -97,11 +96,11 @@ declare interface BaseComponentData {
   message: string | null
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'UpdatePassword',
   components: {
-    ValidationProvider,
-    ValidationObserver,
+    Form,
+    Field,
     FlashMessage
   },
   data(): BaseComponentData {

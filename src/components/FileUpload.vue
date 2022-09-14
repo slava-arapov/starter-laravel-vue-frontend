@@ -1,50 +1,51 @@
 <template>
   <v-card>
-    <validation-observer
-      ref="observer"
-      v-slot="{ invalid }"
-    >
-      <v-form
+      <Form
+        as="v-form"
         ref="form"
-        @submit.prevent="uploadFile"
+        lazy-validation
+        @submit="uploadFile"
+        v-slot="{ meta }"
       >
-        <validation-provider
-          v-slot="{ errors }"
-          ref="provider"
+        <Field
           name="file"
-          :rules="fileRules"
+          ref="input"
+          rules="required|image"
+          @update:modelValue="fileChange"
+          v-slot="{ handleChange, handleBlur, errors }"
         >
           <v-file-input
             :error-messages="errors"
             :accept="fileTypes"
-            @change="fileChange"
+            @change="handleChange"
+            @blur="handleBlur"
+            mode="aggressive"
             id="file"
             :prependIcon="icon"
             :label="label"
           ></v-file-input>
-        </validation-provider>
+        </Field>
         <v-btn
           color="info"
           type="submit"
-          :disabled="!file || invalid"
+          :disabled="!file || !meta.valid"
           small
         >
           Upload
         </v-btn>
         <FlashMessage :message="message" :error="error" />
-      </v-form>
-    </validation-observer>
+      </Form>
   </v-card>
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import { defineComponent } from 'vue';
 import { getError } from '@/utils/helpers';
 import FileService from '@/services/FileService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+import { Field, Form } from 'vee-validate';
 
-setInteractionMode('eager');
+// setInteractionMode('eager');
 
 declare interface BaseComponentData {
   file: Blob | null,
@@ -53,12 +54,7 @@ declare interface BaseComponentData {
   error?: Error | string | string[] | null
 }
 
-export default (Vue as VueConstructor<
-  Vue & {
-  $refs: {
-    provider: InstanceType<typeof ValidationProvider>;
-  };
-}>).extend({
+export default defineComponent({
   name: 'FileUpload',
   props: {
     fileTypes: {
@@ -79,8 +75,8 @@ export default (Vue as VueConstructor<
     }
   },
   components: {
-    ValidationProvider,
-    ValidationObserver,
+    Form,
+    Field,
     FlashMessage
   },
   data(): BaseComponentData {
@@ -99,7 +95,7 @@ export default (Vue as VueConstructor<
     async fileChange(e: File) {
       this.clearMessage();
 
-      const { valid } = await this.$refs.provider.validate(e);
+      const { valid } = await (this.$refs.input as HTMLFormElement).validate(e);
 
       if (e && valid) {
         this.file = (e);

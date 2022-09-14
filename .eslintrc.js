@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   env: {
-    node: true
+    es2021: true
   },
   extends: [
     'plugin:vue/essential',
@@ -9,7 +9,7 @@ module.exports = {
     '@vue/typescript/recommended'
   ],
   parserOptions: {
-    ecmaVersion: 2020
+    ecmaVersion: 2021
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -28,6 +28,12 @@ module.exports = {
       ],
       env: {
         jest: true
+      }
+    },
+    {
+      files: ['src/views/**/*.vue'],
+      rules: {
+        'vue/multi-word-component-names': 0
       }
     }
   ]

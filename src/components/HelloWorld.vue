@@ -6,7 +6,7 @@
       </h1>
       <p class="subheading font-weight-regular">
         Laravel ◦ Sanctum ◦ Fortify ◦ Telescope
-      <br>
+        <br>
         Vue&nbsp;2 ◦ Typescript ◦ Vuetify
       </p>
       <p v-if="msg">
@@ -16,11 +16,18 @@
   </v-row>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script lang='ts'>
+import { defineComponent } from 'vue';
 
-@Component
-export default class HelloWorld extends Vue {
-  @Prop() private msg!: string;
-}
+// Logo
+
+export default defineComponent({
+  name: 'HelloWorld',
+  props: {
+    msg: {
+      type: String,
+      default: null
+    }
+  }
+});
 </script>

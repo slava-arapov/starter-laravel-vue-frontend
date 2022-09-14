@@ -1,22 +1,20 @@
 <template>
   <div>
-    <validation-observer
-      ref="observer"
-      v-slot="{ invalid }"
+    <Form
+      as="v-form"
+      ref="form"
+      lazy-validation
+      @submit="forgotPassword"
+      v-slot="{ meta }"
     >
-      <v-form
-        ref="form"
-        lazy-validation
-        @submit.prevent="forgotPassword"
-      >
-
-        <validation-provider
-          v-slot="{ errors }"
+        <Field
+          v-model="email"
           name="email"
-          :rules="emailRules"
+          rules="required|email"
+          v-slot="{ field, errors }"
         >
           <v-text-field
-            v-model="email"
+            v-bind="field"
             label="Email"
             type="email"
             name="email"
@@ -24,13 +22,13 @@
             :error-messages="errors"
             required
           ></v-text-field>
-        </validation-provider>
+        </Field>
 
         <div class="d-flex flex-row-reverse">
           <v-btn
             color="info"
             type="submit"
-            :disabled="invalid"
+            :disabled="!meta.valid"
           >
             Send
           </v-btn>
@@ -38,43 +36,33 @@
         </div>
 
         <FlashMessage :message="message" :error="error" />
-      </v-form>
-    </validation-observer>
+    </Form>
   </div>
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import { defineComponent } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
-
-setInteractionMode('eager');
+import { Field, Form } from 'vee-validate';
 
 declare interface BaseComponentData {
   email: string | null,
-  emailRules: string,
   error?: Error | string | string[] | null,
   message: string | null
 }
 
-export default (Vue as VueConstructor<
-  Vue & {
-  $refs: {
-    observer: InstanceType<typeof ValidationObserver>;
-  };
-}>).extend({
+export default defineComponent({
   name: 'ForgotPasswordForm',
   components: {
-    ValidationProvider,
-    ValidationObserver,
+    Form,
+    Field,
     FlashMessage
   },
   data(): BaseComponentData {
     return {
       email: '',
-      emailRules: 'required|email',
       error: null,
       message: null
     };
@@ -94,7 +82,7 @@ export default (Vue as VueConstructor<
         console.log(error);
 
         if (error.response.data.errors) {
-          this.$refs.observer.setErrors(error.response.data.errors);
+          (this.$refs.form as HTMLFormElement).setErrors(error.response.data.errors);
         } else {
           this.error = getError(error);
         }

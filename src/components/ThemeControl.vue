@@ -2,7 +2,7 @@
   <div>
     <v-btn-toggle
       v-model="themeToggle"
-      @change="themeToggleChange"
+      @update:modelValue="themeToggleChange"
       mandatory
       rounded
     >
@@ -11,21 +11,30 @@
         :value="'dark'"
         small
       >
-        <v-icon small>{{ mdiIcons.mdiWeatherNight }}</v-icon>
+        <v-icon
+          :icon="mdiIcons.mdiWeatherNight"
+          small
+        ></v-icon>
       </v-btn>
       <v-btn
         title="System Theme"
         :value="'system'"
         small
       >
-        <v-icon small>{{ mdiIcons.mdiThemeLightDark }}</v-icon>
+        <v-icon
+          :icon="mdiIcons.mdiThemeLightDark"
+          small
+        ></v-icon>
       </v-btn>
       <v-btn
         title="Light Theme"
         :value="'light'"
         small
       >
-        <v-icon small>{{ mdiIcons.mdiWhiteBalanceSunny }}</v-icon>
+        <v-icon
+          :icon="mdiIcons.mdiWhiteBalanceSunny"
+          small
+        ></v-icon>
       </v-btn>
     </v-btn-toggle>
 
@@ -33,13 +42,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import store from '@/store';
 import { mdiWeatherNight, mdiThemeLightDark, mdiWhiteBalanceSunny } from '@mdi/js';
 
 const themeInitial = store.getters['settings/theme'] || 'system';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'ThemeControl',
   data: function () {
     return {

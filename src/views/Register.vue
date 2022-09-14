@@ -10,9 +10,9 @@
 
 <script lang="ts">
 import RegisterForm from '@/components/RegisterForm.vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'RegisterView',
   components: {
     RegisterForm

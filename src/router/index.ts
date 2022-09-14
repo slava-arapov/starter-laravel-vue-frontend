@@ -1,38 +1,36 @@
-import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
-import store from '@/store/index';
-import auth from '@/middleware/auth';
-import admin from '@/middleware/admin';
-import guest from '@/middleware/guest';
+import { createRouter, createWebHistory } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router';
+import store from '@/store/index.ts';
+import auth, { AuthInterface } from '@/middleware/auth';
+import admin, { AdminInterface } from '@/middleware/admin';
+import guest, { GuestInterface } from '@/middleware/guest';
 import middlewarePipeline from '@/router/middlewarePipeline';
 
-Vue.use(VueRouter);
-
-const routes: Array<RouteConfig> = [
+const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
     meta: { layout: 'default-centered', middleware: [guest] },
-    component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue')
+    component: () => import('../views/Home.vue')
   },
   {
     path: '/dashboard',
     name: 'dashboard',
     meta: { middleware: [auth] },
     component: () =>
-      import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue')
+      import('../views/Dashboard.vue')
   },
   {
     path: '/user',
     name: 'user',
     meta: { middleware: [auth] },
-    component: () => import(/* webpackChunkName: "user" */ '../views/User.vue')
+    component: () => import('../views/User.vue')
   },
   {
     path: '/users',
     name: 'users',
     meta: { middleware: [auth, admin] },
-    component: () => import(/* webpackChunkName: "users" */ '../views/Users.vue'),
+    component: () => import('../views/Users.vue'),
     beforeEnter: (to, from, next) => {
       if (store.getters['auth/isAdmin']) next();
       else next(false);
@@ -42,52 +40,51 @@ const routes: Array<RouteConfig> = [
     path: '/login',
     name: 'login',
     meta: { layout: 'default-centered', middleware: [guest] },
-    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
+    component: () => import('../views/Login.vue')
   },
   {
     path: '/register',
     name: 'register',
     meta: { layout: 'default-centered', middleware: [guest] },
     component: () =>
-      import(/* webpackChunkName: "register" */ '../views/Register.vue')
+      import('../views/Register.vue')
   },
   {
     path: '/reset-password',
     name: 'ResetPassword',
     meta: { layout: 'default-centered', middleware: [guest] },
     component: () =>
-      import(/* webpackChunkName: "reset-password" */ '../views/ResetPassword.vue')
+      import('../views/ResetPassword.vue')
   },
   {
     path: '/forgot-password',
     name: 'ForgotPassword',
     meta: { layout: 'default-centered', middleware: [guest] },
     component: () =>
-      import(/* webpackChunkName: "forgot-password" */ '../views/ForgotPassword.vue')
+      import('../views/ForgotPassword.vue')
   },
   {
     path: '/about',
     name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import('../views/About.vue')
   },
   {
     path: '/:catchAll(.*)',
     name: 'notFound',
     meta: { layout: 'default-centered' },
     component: () =>
-      import(/* webpackChunkName: "not-found" */ '../views/NotFound.vue')
+      import('../views/NotFound.vue')
   }
 ];
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition;
     } else {
-      return { x: 0, y: 0 };
+      return { left: 0, top: 0 };
     }
   }
 });
@@ -95,6 +92,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const middleware = to.meta?.middleware;
   const context = { to, from, next, store };
+
+  store.commit('SET_ROUTE', to.matched[0].name);
 
   if (!middleware) {
     return next();
@@ -107,3 +106,10 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    layout?: string
+    middleware?: Array<(data: AdminInterface | GuestInterface | AuthInterface) => void>
+  }
+}

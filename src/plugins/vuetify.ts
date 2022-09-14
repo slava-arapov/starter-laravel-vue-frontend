@@ -1,11 +1,19 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import 'vuetify/styles';
 
-Vue.use(Vuetify);
+import { createVuetify } from 'vuetify';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 
-export default new Vuetify({
-  theme: { dark: false },
+export default createVuetify({
+  components,
+  directives,
+  theme: { defaultTheme: 'light' },
   icons: {
-    iconfont: 'mdiSvg'
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi
+    }
   }
 });

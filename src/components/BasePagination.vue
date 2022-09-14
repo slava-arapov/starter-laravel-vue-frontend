@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
 /**
  * @typedef {Object} meta
@@ -21,7 +21,7 @@ import Vue from 'vue';
  * @property {string} last_page
  *
  */
-export default Vue.extend({
+export default defineComponent({
   props: {
     action: {
       type: String,

@@ -1,26 +1,25 @@
 <template>
-  <validation-observer
-    ref="observer"
-    v-slot="{ invalid }"
-  >
     <v-card
       elevation="2"
       width="20rem"
     >
       <v-card-title>Reset Password</v-card-title>
-        <v-form
+        <Form
+          as="v-form"
           ref="form"
           class="px-5 pb-5"
           lazy-validation
           @submit.prevent="resetPassword"
+          v-slot="{ meta }"
         >
-          <validation-provider
-            v-slot="{ errors }"
+          <Field
+            v-model="email"
             name="email"
             :rules="emailRules"
+            v-slot="{ field, errors }"
           >
             <v-text-field
-              v-model="email"
+              v-bind="field"
               label="Email"
               type="email"
               name="email"
@@ -28,15 +27,16 @@
               :error-messages="errors"
               required
             ></v-text-field>
-          </validation-provider>
+          </Field>
 
-          <validation-provider
-            v-slot="{ errors }"
+          <Field
+            v-model="password"
             name="password"
             :rules="passwordRules"
+            v-slot="{ field, errors }"
           >
             <v-text-field
-              v-model="password"
+              v-bind="field"
               :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
               label="Password"
               :type="showPass ? 'text' : 'password'"
@@ -45,15 +45,16 @@
               required
               @click:append="showPass = !showPass"
             ></v-text-field>
-          </validation-provider>
+          </Field>
 
-          <validation-provider
-            v-slot="{ errors }"
+          <Field
+            v-model="passwordConfirm"
             name="confirm-password"
             :rules="passwordConfirmRules"
+            v-slot="{ field, errors }"
           >
             <v-text-field
-              v-model="passwordConfirm"
+              v-bind="field"
               :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
               label="Confirm Password"
               :type="showPass ? 'text' : 'password'"
@@ -62,36 +63,33 @@
               required
               @click:append="showPass = !showPass"
             ></v-text-field>
-          </validation-provider>
+          </Field>
 
           <v-btn
             color="info"
             type="submit"
-            :disabled="invalid"
+            :disabled="!meta.valid"
           >
             Reset Password
           </v-btn>
           <FlashMessage :message="message" :error="error" />
-        </v-form>
+        </Form>
     </v-card>
-  </validation-observer>
 </template>
 
 <script>
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import Vue from 'vue';
-import { ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+import { defineComponent } from 'vue';
+import { Form, Field } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 
-setInteractionMode('eager');
-
-export default Vue.extend({
+export default defineComponent({
   name: 'ResetPassword',
   components: {
-    ValidationProvider,
-    ValidationObserver,
+    Form,
+    Field,
     FlashMessage
   },
   data() {
@@ -103,6 +101,7 @@ export default Vue.extend({
       email: null,
       password: null,
       passwordConfirm: null,
+      showPass: false,
       emailRules: 'required|email',
       passwordRules: 'required',
       passwordConfirmRules: 'required|password:@password',
@@ -118,7 +117,7 @@ export default Vue.extend({
         email: this.email,
         password: this.password,
         password_confirmation: this.passwordConfirm,
-        token: this.$route.query.token
+        token: this.$route?.query?.token
       };
       AuthService.resetPassword(payload)
         .then(() => (this.message = 'Password reset.'))

@@ -14,18 +14,26 @@
             :src="apiUrl+authUser.avatar"
             aspect-ratio="1"
             class="shrink grey lighten-2 rounded-circle"
-            cover
             max-height="36"
             max-width="36"
           />
-          <v-icon size="36" v-else>{{ mdiIcons.mdiAccountCircle }}</v-icon>
+          <v-icon
+            v-else
+            :icon="mdiIcons.mdiAccountCircle"
+            size="36"
+          ></v-icon>
         </v-avatar>
       <p class="ma-0">
         {{ authUser.name }}
       </p>
     </v-card-title>
     <v-card-subtitle class="d-flex align-center">
-      <v-icon v-if="authUser.email_verified_at" class="success--text pr-1" title="Verified Email">{{ mdiIcons.mdiCheckDecagram }}</v-icon>
+      <v-icon
+        v-if="authUser.email_verified_at"
+        :icon="mdiIcons.mdiCheckDecagram"
+        class="success--text pr-1"
+        title="Verified Email"
+      ></v-icon>
       {{ authUser.email }}
     </v-card-subtitle>
 
@@ -36,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 import VerifyEmail from '@/components/VerifyEmail.vue';
 import { mdiAccountCircle, mdiCheckDecagram } from '@mdi/js';
@@ -46,7 +54,7 @@ declare interface BaseComponentData {
   apiUrl: string | null
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AuthUser',
   components: {
     VerifyEmail
@@ -58,7 +66,7 @@ export default Vue.extend({
         mdiAccountCircle,
         mdiCheckDecagram
       },
-      apiUrl: process.env.VUE_APP_API_URL
+      apiUrl: import.meta.env.VITE_APP_API_URL
     };
   },
   computed: {

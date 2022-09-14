@@ -1,5 +1,5 @@
 <template>
-  <v-row dense>
+  <v-row>
     <v-col cols="12" sm="6" md="4" lg="3">
       <AuthUser class="ma-3 pa-5" />
     </v-col>
@@ -28,13 +28,13 @@ import FileUpload from '@/components/FileUpload.vue';
 import AuthUserForm from '@/components/AuthUserForm.vue';
 import UpdatePassword from '@/components/UpdatePassword.vue';
 import { mdiCamera } from '@mdi/js';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
 declare interface BaseComponentData {
   mdiIcons: Record<string, string>
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'UserView',
   components: {
     AuthUser,

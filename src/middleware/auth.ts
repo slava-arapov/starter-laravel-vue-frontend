@@ -1,12 +1,13 @@
-import { NavigationGuardNext, Route } from 'vue-router';
+import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 import { Store } from 'vuex';
 import { AuthState } from '@/store/modules/Auth';
 import { UserState } from '@/store/modules/User';
+import { StoreState } from '@/store';
 
 export interface AuthInterface {
-  to: Route,
+  to: RouteLocationNormalized,
   next: NavigationGuardNext,
-  store: Store<AuthState | UserState | Record<string, never>>
+  store: Store<StoreState | AuthState | UserState | Record<string, never>>
 }
 
 export default function auth({ to, next, store }: AuthInterface): void {

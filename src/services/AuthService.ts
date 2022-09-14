@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { onResponse, onResponseError } from '@/services/API';
 
 export const authClient = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: import.meta.env.VITE_APP_API_URL,
   withCredentials: true // required to handle the CSRF token
 });
 

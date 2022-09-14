@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
@@ -27,7 +27,7 @@ declare interface BaseComponentData {
   message: string | null
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'VerifyEmail',
   components: {
     FlashMessage

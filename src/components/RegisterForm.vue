@@ -1,21 +1,20 @@
 <template>
   <div>
-    <validation-observer
-      ref="observer"
-      v-slot="{ invalid }"
+    <Form
+      as="v-form"
+      ref="form"
+      lazy-validation
+      @submit="registerUser"
+      v-slot="{ meta }"
     >
-      <v-form
-        ref="form"
-        lazy-validation
-        @submit.prevent="registerUser"
-      >
-        <validation-provider
-          v-slot="{ errors }"
+        <Field
+          v-model="name"
           name="name"
           :rules="nameRules"
+          v-slot="{ field, errors }"
         >
           <v-text-field
-            v-model="name"
+            v-bind="field"
             label="Name"
             type="text"
             name="name"
@@ -23,14 +22,15 @@
             :error-messages="errors"
             required
           ></v-text-field>
-        </validation-provider>
-        <validation-provider
-          v-slot="{ errors }"
+        </Field>
+        <Field
+          v-model="email"
           name="email"
           :rules="emailRules"
+          v-slot="{ field, errors }"
         >
           <v-text-field
-            v-model="email"
+            v-bind="field"
             label="Email"
             type="email"
             name="email"
@@ -38,15 +38,16 @@
             :error-messages="errors"
             required
           ></v-text-field>
-        </validation-provider>
+        </Field>
 
-        <validation-provider
-          v-slot="{ errors }"
+        <Field
+          v-model="password"
           name="password"
           :rules="passwordRules"
+          v-slot="{ field, errors }"
         >
           <v-text-field
-            v-model="password"
+            v-bind="field"
             :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
             label="Password"
             :type="showPass ? 'text' : 'password'"
@@ -55,15 +56,16 @@
             required
             @click:append="showPass = !showPass"
           ></v-text-field>
-        </validation-provider>
+        </Field>
 
-        <validation-provider
-          v-slot="{ errors }"
+        <Field
+          v-model="passwordConfirm"
           name="confirm-password"
           :rules="passwordConfirmRules"
+          v-slot="{ field, errors }"
         >
           <v-text-field
-            v-model="passwordConfirm"
+            v-bind="field"
             :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
             label="Confirm Password"
             :type="showPass ? 'text' : 'password'"
@@ -72,30 +74,27 @@
             required
             @click:append="showPass = !showPass"
           ></v-text-field>
-        </validation-provider>
+        </Field>
 
         <v-btn
           color="info"
           type="submit"
-          :disabled="invalid"
+          :disabled="!meta.valid"
         >
           Register
         </v-btn>
         <FlashMessage :error="error" />
-      </v-form>
-    </validation-observer>
+    </Form>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+import { Form, Field } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
-
-setInteractionMode('eager');
 
 declare interface BaseComponentData {
   mdiIcons: Record<string, string>,
@@ -111,11 +110,11 @@ declare interface BaseComponentData {
   error?: Error | string | string[] | null
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'RegisterForm',
   components: {
-    ValidationProvider,
-    ValidationObserver,
+    Form,
+    Field,
     FlashMessage
   },
   data(): BaseComponentData {

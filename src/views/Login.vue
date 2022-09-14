@@ -19,9 +19,9 @@
 
 <script lang="ts">
 import LoginForm from '@/components/LoginForm.vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'LoginView',
   components: {
     LoginForm

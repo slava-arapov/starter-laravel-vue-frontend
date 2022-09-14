@@ -30,9 +30,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   // name: 'FlashMessage',
   props: {
     message: {
@@ -54,7 +54,10 @@ export default Vue.extend({
   },
   methods: {
     getErrors (key: string | number) {
-      return this.error[key];
+      if (this.error && this.getType(this.error) === 'object') {
+        return (this.error as Record<string | number, string>)[key];
+      }
+      return null;
     },
     // eslint-disable-next-line
     getType(obj: any) {

@@ -26,7 +26,6 @@ export const actions = {
 
 export const getters = {
   theme: (): string | null => {
-    const storageItem = window.localStorage.getItem('theme');
-    return storageItem;
+    return window.localStorage.getItem('theme');
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <v-row dense>
+  <v-row>
     <v-col sm="6" md="4" xl="3">
       <v-card
         class="info d-flex flex-no-wrap justify-space-between"
@@ -8,8 +8,9 @@
         <div>
           <v-card-title
             class="text-h5"
-            v-text="authUser.name"
-          ></v-card-title>
+          >
+            {{ authUser.name }}
+          </v-card-title>
           <v-card-subtitle>signed in</v-card-subtitle>
 
           <v-card-actions>
@@ -34,12 +35,15 @@
             v-if="authUser.avatar"
             :src="apiUrl+authUser.avatar"
             aspect-ratio="1"
-          class="shrink grey lighten-2 rounded-circle "
-            cover
+            class="shrink grey lighten-2 rounded-circle "
             max-height="125"
             max-width="125"
           />
-          <v-icon size="125" v-else>{{ mdiIcons.mdiAccountCircle }}</v-icon>
+          <v-icon
+            v-else
+            :icon="mdiIcons.mdiAccountCircle"
+            size="125"
+          ></v-icon>
         </v-avatar>
       </v-card>
     </v-col>
@@ -104,10 +108,10 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mdiAccountCircle } from '@mdi/js';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'Dashboard',
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data: function () {
@@ -115,7 +119,7 @@ export default Vue.extend({
       mdiIcons: {
         mdiAccountCircle
       },
-      apiUrl: process.env.VUE_APP_API_URL
+      apiUrl: import.meta.env.VITE_APP_API_URL
     };
   },
   computed: {

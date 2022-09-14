@@ -7,10 +7,10 @@ The starter is decoupled into two parts:
 -  [Frontend Vue.js SPA](https://github.com/slava-arapov/starter-laravel-vue-frontend/) (you are here)
 
 ## Features and Dependencies
-* Vue 2, Vue Router 3, Vuex 3, ESLint, Vue CLI 3
+* Vue 3 (Options API), Vue Router 4, Vuex 4, ESLint, Vite
 * Vue Components with TypeScript declarations
-* Vuetify 2
-* VeeValidate 3
+* Vuetify 3 Beta
+* VeeValidate 4
 * Material Design Icons — [SVG custom import](https://vuetifyjs.com/en/features/icon-fonts/#material-design-icons-js-svg)
 * User Authentication and Authorization using Laravel Sanctum 
 * Login, Register, Email Verification and Password Reset using Laravel Fortify
@@ -21,7 +21,7 @@ The starter is decoupled into two parts:
 * Dark/Light/System Theme Switch
 
 ## System Requirements
-* Node.js >= 8.9 (v10+ recommended)
+* Node.js >= 16.0
 
 ## Project Setup
 1. Clone the repository
@@ -38,8 +38,8 @@ The starter is decoupled into two parts:
    
 3. Edit your .env file. Make sure your API URL added
    ``` dotenv
-   VUE_APP_API_URL=http://localhost # for local development, Laravel Sail default
-   VUE_APP_API_URL=https://api.yourappname.com # for production build
+   VITE_APP_API_URL=http://localhost # for local development, Laravel Sail default
+   VITE_APP_API_URL=https://api.yourappname.com # for production build
    ```
 
 4. Install dependencies
@@ -49,22 +49,12 @@ The starter is decoupled into two parts:
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+npm run dev
 ```
 
 ### Compiles and minifies for production
 ```
 npm run build
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Run your end-to-end tests
-```
-npm run test:e2e
 ```
 
 ### Lints and fixes files

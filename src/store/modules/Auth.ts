@@ -3,6 +3,7 @@ import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import { Commit } from 'vuex';
 import { AxiosResponse } from 'axios';
+import { StoreState } from '@/store';
 
 export const namespaced = true;
 
@@ -46,12 +47,12 @@ export const mutations = {
 };
 
 export const actions = {
-  logout({ commit }: { commit: Commit }): Promise<void> {
+  logout({ commit, rootState }: { commit: Commit, rootState: StoreState }): Promise<void> {
     return AuthService.logout()
       .then(() => {
         commit('SET_USER', null);
         commit('SET_GUEST', 'isGuest');
-        if (router.currentRoute.name !== 'login') {
+        if (rootState.route !== 'login') {
           router.push({ path: '/login' }).then();
         }
       })

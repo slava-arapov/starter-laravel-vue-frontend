@@ -1,14 +1,17 @@
-import { NavigationGuardNext } from 'vue-router';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { Store } from 'vuex';
 import { AuthState } from '@/store/modules/Auth';
 import { UserState } from '@/store/modules/User';
+import { StoreState } from '@/store';
 
 export interface GuestInterface {
+  to: RouteLocationNormalized,
   next: NavigationGuardNext,
-  store: Store<AuthState | UserState | Record<string, never>>
+  store: Store<StoreState | AuthState | UserState | Record<string, never>>
 }
 
-export default function guest({ next, store }: GuestInterface): void {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function guest({ to, next, store }: GuestInterface): void {
   const storageItem = window.localStorage.getItem('guest');
   if (storageItem === 'isNotGuest' && !store.getters['auth/authUser']) {
     store.dispatch('auth/getAuthUser').then(() => {
