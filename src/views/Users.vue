@@ -71,37 +71,44 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex';
-import store from '@/store/index';
+import { useStore } from 'vuex';
 import FlashMessage from '@/components/FlashMessage.vue';
 import BasePagination from '@/components/BasePagination.vue';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { defineComponent } from 'vue';
+import { useRoute } from 'vue-router';
+import { computed, defineComponent, watch } from 'vue';
 import { mdiAccountCircle, mdiEmail } from '@mdi/js';
 
 export default defineComponent({
   components: { FlashMessage, BasePagination },
   name: 'UsersView',
-  computed: {
-    ...mapGetters('user', ['loading', 'error', 'users', 'meta', 'links'])
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  data: function () {
-    return {
-      mdiIcons: {
-        mdiAccountCircle,
-        mdiEmail
-      },
-      apiUrl: import.meta.env.VITE_APP_API_URL
-    };
-  },
-  beforeRouteEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-    const currentPage = (typeof to.query.page === 'string') ? to.query.page : '1';
+  setup () {
+    const store = useStore();
+    const route = useRoute();
 
-    store.dispatch('user/getUsers', parseInt(currentPage)).then(() => {
-      to.params.page = currentPage;
-      next();
-    });
+    const mdiIcons = {
+      mdiAccountCircle,
+      mdiEmail
+    };
+
+    const apiUrl = import.meta.env.VITE_APP_API_URL;
+
+    watch(() => route, (to) => {
+      const currentPage = (typeof to.query.page === 'string') ? to.query.page : '1';
+
+      store.dispatch('user/getUsers', parseInt(currentPage)).then(() => {
+        to.params.page = currentPage;
+      });
+    }, { flush: 'pre', immediate: true, deep: true });
+
+    return {
+      mdiIcons,
+      apiUrl,
+      loading: computed(() => store.getters['user/loading']),
+      error: computed(() => store.getters['user/error']),
+      users: computed(() => store.getters['user/users']),
+      meta: computed(() => store.getters['user/meta']),
+      links: computed(() => store.getters['user/links'])
+    };
   }
 });
 </script>

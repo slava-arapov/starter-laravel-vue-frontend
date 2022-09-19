@@ -29,30 +29,31 @@ import AuthUserForm from '@/components/AuthUserForm.vue';
 import UpdatePassword from '@/components/UpdatePassword.vue';
 import { mdiCamera } from '@mdi/js';
 import { defineComponent } from 'vue';
-
-declare interface BaseComponentData {
-  mdiIcons: Record<string, string>
-}
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'UserView',
+  setup () {
+    const store = useStore();
+
+    const mdiIcons = {
+      mdiCamera
+    };
+
+    function updateUser() {
+      store.dispatch('auth/getAuthUser');
+    }
+
+    return {
+      mdiIcons,
+      updateUser
+    };
+  },
   components: {
     AuthUser,
     FileUpload,
     AuthUserForm,
     UpdatePassword
-  },
-  data(): BaseComponentData {
-    return {
-      mdiIcons: {
-        mdiCamera
-      }
-    };
-  },
-  methods: {
-    updateUser() {
-      this.$store.dispatch('auth/getAuthUser');
-    }
   }
 });
 </script>

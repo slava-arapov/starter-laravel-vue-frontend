@@ -107,23 +107,26 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex';
-import { defineComponent } from 'vue';
+import { useStore } from 'vuex';
+import { computed, defineComponent } from 'vue';
 import { mdiAccountCircle } from '@mdi/js';
 
 export default defineComponent({
   name: 'Dashboard',
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  data: function () {
-    return {
-      mdiIcons: {
-        mdiAccountCircle
-      },
-      apiUrl: import.meta.env.VITE_APP_API_URL
+  setup () {
+    const store = useStore();
+
+    const mdiIcons = {
+      mdiAccountCircle
     };
-  },
-  computed: {
-    ...mapGetters('auth', ['authUser'])
+
+    const apiUrl = import.meta.env.VITE_APP_API_URL;
+
+    return {
+      mdiIcons,
+      apiUrl,
+      authUser: computed(() => store.getters['auth/authUser'])
+    };
   }
 });
 </script>
