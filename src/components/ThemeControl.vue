@@ -42,29 +42,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import store from '@/store';
+import { defineComponent, ref } from 'vue';
 import { mdiWeatherNight, mdiThemeLightDark, mdiWhiteBalanceSunny } from '@mdi/js';
-
-const themeInitial = store.getters['settings/theme'] || 'system';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'ThemeControl',
-  data: function () {
-    return {
-      mdiIcons: {
-        mdiWeatherNight,
-        mdiThemeLightDark,
-        mdiWhiteBalanceSunny
-      },
-      themeToggle: themeInitial
+  setup () {
+    const store = useStore();
+
+    const mdiIcons = {
+      mdiWeatherNight,
+      mdiThemeLightDark,
+      mdiWhiteBalanceSunny
     };
-  },
-  methods: {
-    async themeToggleChange() {
-      console.log(this.themeToggle);
-      await this.$store.dispatch('settings/setTheme', { value: this.themeToggle });
+
+    const themeInitial = store.state.settings.theme || 'system';
+
+    const themeToggle = ref(themeInitial);
+
+    function themeToggleChange() {
+      store.dispatch('settings/setTheme', { value: themeToggle.value });
     }
+
+    return {
+      mdiIcons,
+      themeInitial,
+      themeToggle,
+      themeToggleChange
+    };
   }
 });
 </script>

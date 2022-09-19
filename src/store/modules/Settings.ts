@@ -23,9 +23,3 @@ export const actions = {
     commit('SET_THEME', value);
   }
 };
-
-export const getters = {
-  theme: (): string | null => {
-    return window.localStorage.getItem('theme');
-  }
-};
