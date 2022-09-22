@@ -59,20 +59,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { Field, Form } from 'vee-validate';
-
-declare interface BaseComponentData {
-  invalid: boolean,
-  email: string | null,
-  password: string | null,
-  emailRules: string,
-  passwordRules: string,
-  error?: Error | string | string[] | null
-}
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'LoginForm',
@@ -81,47 +75,61 @@ export default defineComponent({
     Field,
     FlashMessage
   },
-  data(): BaseComponentData {
-    return {
-      invalid: false,
-      email: '',
-      password: '',
-      emailRules: 'required|email',
-      passwordRules: 'required',
-      error: null
-    };
-  },
-  methods: {
-    async login(): Promise<void> {
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    const invalid = ref(false);
+    const email = ref('');
+    const password = ref('');
+
+    const emailRules = 'required|email';
+    const passwordRules = 'required';
+
+    const error: Ref<Error | string | string[] | null> = ref(null);
+
+    const form: Ref<HTMLFormElement | null> = ref(null);
+
+    async function login(): Promise<void> {
       const payload = {
-        email: this.email,
-        password: this.password
+        email: email.value,
+        password: password.value
       };
-      this.error = null;
+      error.value = null;
       try {
         await AuthService.login(payload);
-        const authUser = await this.$store.dispatch('auth/getAuthUser');
+        const authUser = await store.dispatch('auth/getAuthUser');
         if (authUser) {
-          await this.$store.dispatch('auth/setGuest', { value: 'isNotGuest' });
-          await this.$router.push('/dashboard');
+          await store.dispatch('auth/setGuest', { value: 'isNotGuest' });
+          await router.push('/dashboard');
         } else {
-          const error = Error(
+          const fetchError = Error(
             'Unable to fetch user after login, check your API settings.'
           );
-          error.name = 'Fetch User';
-          console.log(error);
-          this.error = getError(error);
+          fetchError.name = 'Fetch User';
+          console.log(fetchError);
+          error.value = getError(fetchError);
         }
-      } catch (error) {
-        console.log(error);
+      } catch (e) {
+        console.log(e);
 
-        if (error.response.data.errors) {
-          (this.$refs.form as HTMLFormElement).setErrors(error.response.data.errors);
+        if (e.response.data && e.response.data.errors && form.value !== null) {
+          form.value.setErrors(e.response.data.errors);
         } else {
-          this.error = getError(error);
+          error.value = getError(e);
         }
       }
     }
+
+    return {
+      invalid,
+      email,
+      password,
+      emailRules,
+      passwordRules,
+      error,
+      login
+    };
   }
 });
 </script>

@@ -89,26 +89,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, Ref, ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { Form, Field } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
-
-declare interface BaseComponentData {
-  mdiIcons: Record<string, string>,
-  showPass: boolean,
-  name: string | null,
-  email: string | null,
-  password: string | null,
-  passwordConfirm: string | null,
-  nameRules: string,
-  emailRules: string,
-  passwordRules: string,
-  passwordConfirmRules: string,
-  error?: Error | string | string[] | null
-}
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'RegisterForm',
@@ -117,37 +104,51 @@ export default defineComponent({
     Field,
     FlashMessage
   },
-  data(): BaseComponentData {
-    return {
-      mdiIcons: {
-        mdiEye,
-        mdiEyeOff
-      },
-      showPass: false,
-      name: null,
-      email: null,
-      password: null,
-      passwordConfirm: null,
-      nameRules: 'required',
-      emailRules: 'required|email',
-      passwordRules: 'required',
-      passwordConfirmRules: 'required|password:@password',
-      error: null
+  setup() {
+    const router = useRouter();
+
+    const mdiIcons = {
+      mdiEye,
+      mdiEyeOff
     };
-  },
-  methods: {
-    registerUser() {
-      this.error = null;
+    const showPass = ref(false);
+    const name: Ref<string | null> = ref(null);
+    const email: Ref<string | null> = ref(null);
+    const password: Ref<string | null> = ref(null);
+    const passwordConfirm: Ref<string | null> = ref(null);
+    const nameRules = 'required';
+    const emailRules = 'required|email';
+    const passwordRules = 'required';
+    const passwordConfirmRules = 'required|password:@password';
+    const error: Ref<Error | string | string[] | null> = ref(null);
+
+    function registerUser() {
+      error.value = null;
       const payload = {
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.passwordConfirm
+        name: name.value,
+        email: email.value,
+        password: password.value,
+        password_confirmation: passwordConfirm.value
       };
       AuthService.registerUser(payload)
-        .then(() => this.$router.push('/dashboard'))
-        .catch((error) => (this.error = getError(error)));
+        .then(() => router.push('/dashboard'))
+        .catch((e) => (error.value = getError(e)));
     }
+
+    return {
+      mdiIcons,
+      showPass,
+      name,
+      email,
+      password,
+      passwordConfirm,
+      nameRules,
+      emailRules,
+      passwordRules,
+      passwordConfirmRules,
+      error,
+      registerUser
+    };
   }
 });
 </script>

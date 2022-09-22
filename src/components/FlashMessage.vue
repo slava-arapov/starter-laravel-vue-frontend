@@ -17,7 +17,7 @@
         key="error-list"
       >
         <li v-for="key in errorKeys" :key="key">
-          <b class="font-bold capitalize">{{ key | titleCase }}</b>
+          <b class="font-bold capitalize">{{ titleCase(key) }}</b>
           <ul class="ml-2">
             <li v-for="(item, index) in getErrors(key)" :key="`${index}-error`">
               {{ item }}
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 export default defineComponent({
   // name: 'FlashMessage',
@@ -44,30 +44,36 @@ export default defineComponent({
       default: null
     }
   },
-  computed: {
-    errorKeys() {
-      if (!this.error || this.getType(this.error) === 'string') {
-        return null;
-      }
-      return Object.keys(this.error);
-    }
-  },
-  methods: {
-    getErrors (key: string | number) {
-      if (this.error && this.getType(this.error) === 'object') {
-        return (this.error as Record<string | number, string>)[key];
-      }
-      return null;
-    },
+  setup(props) {
     // eslint-disable-next-line
-    getType(obj: any) {
+    function getType(obj: any) {
       return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
     }
-  },
-  filters: {
-    titleCase(value: string) {
+
+    function getErrors (key: string | number) {
+      if (props.error && getType(props.error) === 'object') {
+        return (props.error as Record<string | number, string>)[key];
+      }
+      return null;
+    }
+
+    const errorKeys = computed(() => {
+      if (!props.error || getType(props.error) === 'string') {
+        return null;
+      }
+      return Object.keys(props.error);
+    });
+
+    function titleCase(value: string) {
       return value.replace('_', ' ');
     }
+
+    return {
+      errorKeys,
+      getType,
+      getErrors,
+      titleCase
+    };
   }
 });
 </script>

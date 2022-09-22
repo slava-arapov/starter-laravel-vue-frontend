@@ -60,10 +60,17 @@ export default defineComponent({
       default: null
     }
   },
-  methods: {
-    updateValue(event: Event) {
-      return this.$emit('input', (event.target as HTMLInputElement).value);
+  emits: [
+    'input'
+  ],
+  setup(props, context) {
+    function updateValue(event: Event) {
+      return context.emit('input', (event.target as HTMLInputElement).value);
     }
+
+    return {
+      updateValue
+    };
   }
 });
 </script>

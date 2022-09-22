@@ -98,28 +98,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { computed, defineComponent } from 'vue';
+import { useStore } from 'vuex';
 import { mdiLogout } from '@mdi/js';
 
 export default defineComponent({
   name: 'Header',
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  data: function () {
-    return {
-      apiUrl: import.meta.env.VITE_APP_API_URL,
-      mdiIcons: {
-        mdiLogout
-      }
+  setup() {
+    const store = useStore();
+
+    const mdiIcons = {
+      mdiLogout
     };
-  },
-  computed: {
-    ...mapGetters('auth', ['authUser', 'isAdmin'])
-  },
-  methods: {
-    logout() {
-      this.$store.dispatch('auth/logout');
+
+    function logout() {
+      store.dispatch('auth/logout');
     }
+
+    return {
+      mdiIcons,
+      apiUrl: import.meta.env.VITE_APP_API_URL,
+      authUser: computed(() => store.getters['auth/authUser']),
+      isAdmin: computed(() => store.getters['auth/isAdmin']),
+      logout
+    };
   }
 });
 </script>

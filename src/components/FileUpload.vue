@@ -19,6 +19,7 @@
             :accept="fileTypes"
             @change="handleChange"
             @blur="handleBlur"
+            :on-click:clear="handleChange"
             mode="aggressive"
             id="file"
             :prependIcon="icon"
@@ -39,20 +40,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import FileService from '@/services/FileService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { Field, Form } from 'vee-validate';
 
 // setInteractionMode('eager');
-
-declare interface BaseComponentData {
-  file: Blob | null,
-  fileRules: string,
-  message: string | null,
-  error?: Error | string | string[] | null
-}
 
 export default defineComponent({
   name: 'FileUpload',
@@ -74,49 +69,65 @@ export default defineComponent({
       default: undefined
     }
   },
+  emits: [
+    'fileUploaded'
+  ],
   components: {
     Form,
     Field,
     FlashMessage
   },
-  data(): BaseComponentData {
-    return {
-      file: null,
-      fileRules: 'required|image',
-      message: null,
-      error: null
-    };
-  },
-  methods: {
-    clearMessage() {
-      this.error = null;
-      this.message = null;
-    },
-    async fileChange(e: File) {
-      this.clearMessage();
+  setup(props, context) {
+    const file: Ref<Blob | null> = ref(null);
+    const fileRules = 'required|image';
 
-      const { valid } = await (this.$refs.input as HTMLFormElement).validate(e);
+    const message: Ref<string | null> = ref(null);
+    const error: Ref<Error | string | string[] | null> = ref(null);
 
-      if (e && valid) {
-        this.file = (e);
+    const input: Ref<HTMLFormElement | null> = ref(null);
+
+    function clearMessage() {
+      error.value = null;
+      message.value = null;
+    }
+
+    async function fileChange(e: File) {
+      clearMessage();
+
+      if (input.value) {
+        const { valid } = await input.value.validate(e);
+
+        if (e && valid) {
+          file.value = (e);
+        }
       }
-    },
-    uploadFile() {
+    }
+
+    function uploadFile() {
       const payload = {} as {'file': FormData | null, 'endpoint': string};
       const formData = new FormData();
-      if (this.file) {
-        formData.append('file', this.file);
+      if (file.value) {
+        formData.append('file', file.value);
       }
       payload.file = formData;
-      payload.endpoint = this.endpoint;
-      this.clearMessage();
+      payload.endpoint = props.endpoint;
+      clearMessage();
       FileService.uploadFile(payload)
         .then(() => {
-          this.message = 'File uploaded.';
-          this.$emit('fileUploaded');
+          message.value = 'File uploaded.';
+          context.emit('fileUploaded');
         })
-        .catch((error) => (this.error = getError(error)));
+        .catch((e) => (error.value = getError(e)));
     }
+
+    return {
+      file,
+      fileRules,
+      message,
+      error,
+      fileChange,
+      uploadFile
+    };
   }
 });
 </script>

@@ -1,22 +1,24 @@
 <template>
   <div aria-label="Pagination">
     <p class="text-sm text-gray-500">
-      Page {{ meta.current_page }} of {{ meta.last_page }}
+      Page {{ value.current_page }} of {{ value.last_page }}
     </p>
     <div class="text-center">
       <v-pagination
-        v-model="meta.current_page"
-        :length="meta.last_page"
+        v-model="value.current_page"
+        :length="value.last_page"
       ></v-pagination>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent, watch } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 /**
- * @typedef {Object} meta
+ * @typedef {Meta} modelValue
  * @property {string} current_page
  * @property {string} last_page
  *
@@ -31,7 +33,7 @@ export default defineComponent({
       type: String,
       default: null
     },
-    meta: {
+    modelValue: {
       type: Object,
       required: true
     },
@@ -40,17 +42,36 @@ export default defineComponent({
       required: true
     }
   },
-  watch: {
-    'meta.current_page': function() {
-      this.$store.dispatch(this.action, this.meta.path + '/?page=' + (this.meta.current_page).toString()).then(() => {
-        if (this.path) {
-          this.$router.push({
-            path: this.path,
-            query: { page: (this.meta.current_page).toString() }
+  emits: [
+    'update:modelValue'
+  ],
+  setup(props, context) {
+    const store = useStore();
+    const router = useRouter();
+
+    const value = computed({
+      get() {
+        return props.modelValue;
+      },
+      set(value) {
+        context.emit('update:modelValue', value);
+      }
+    });
+
+    watch(() => props.modelValue.current_page, () => {
+      store.dispatch(props.action, props.modelValue.path + '/?page=' + (props.modelValue.current_page).toString()).then(() => {
+        if (props.path) {
+          router.push({
+            path: props.path,
+            query: { page: (props.modelValue.current_page).toString() }
           });
         }
       });
-    }
+    });
+
+    return {
+      value
+    };
   }
 });
 </script>

@@ -6,7 +6,7 @@
         as="v-form"
         ref="form"
         lazy-validation
-        @submit.prevent="updatePassword"
+        @submit="updatePassword"
         v-slot="{ meta }"
       >
 
@@ -78,23 +78,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { Form, Field } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
-
-declare interface BaseComponentData {
-  mdiIcons: Record<string, string>,
-  showPass: boolean,
-  currentPassword: string | null,
-  password: string | null,
-  passwordRules: string,
-  passwordConfirm: string | null,
-  error?: Error | string | string[] | null,
-  message: string | null
-}
 
 export default defineComponent({
   name: 'UpdatePassword',
@@ -103,34 +93,46 @@ export default defineComponent({
     Field,
     FlashMessage
   },
-  data(): BaseComponentData {
-    return {
-      mdiIcons: {
-        mdiEye,
-        mdiEyeOff
-      },
-      showPass: false,
-      currentPassword: null,
-      password: null,
-      passwordConfirm: null,
-      passwordRules: 'required',
-      error: null,
-      message: null
+  setup() {
+    const mdiIcons = {
+      mdiEye,
+      mdiEyeOff
     };
-  },
-  methods: {
-    updatePassword() {
-      this.error = null;
-      this.message = null;
+
+    const showPass = ref(false);
+    const currentPassword: Ref<string | null> = ref(null);
+    const password: Ref<string | null> = ref(null);
+    const passwordConfirm: Ref<string | null> = ref(null);
+
+    const passwordRules = 'required';
+
+    const error: Ref<Error | string | string[] | null> = ref(null);
+    const message: Ref<string | null> = ref(null);
+
+    function updatePassword() {
+      error.value = null;
+      message.value = null;
       const payload = {
-        current_password: this.currentPassword,
-        password: this.password,
-        password_confirmation: this.passwordConfirm
+        current_password: currentPassword.value,
+        password: password.value,
+        password_confirmation: passwordConfirm.value
       };
       AuthService.updatePassword(payload)
-        .then(() => (this.message = 'Password updated.'))
-        .catch((error) => (this.error = getError(error)));
+        .then(() => (message.value = 'Password updated.'))
+        .catch((e) => (error.value = getError(e)));
     }
+
+    return {
+      mdiIcons,
+      showPass,
+      currentPassword,
+      password,
+      passwordConfirm,
+      passwordRules,
+      error,
+      message,
+      updatePassword
+    };
   }
 });
 </script>

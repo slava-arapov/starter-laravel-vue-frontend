@@ -15,25 +15,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { computed, defineComponent } from 'vue';
+import { useStore } from 'vuex';
 import ThemeControl from '@/components/ThemeControl.vue';
 
 export default defineComponent({
   name: 'Footer',
   components: { ThemeControl },
-  data: function () {
-    return {
-      apiUrl: import.meta.env.VITE_APP_API_URL
-    };
-  },
-  computed: {
-    ...mapGetters('auth', ['authUser', 'isAdmin'])
-  },
-  methods: {
-    logout() {
-      this.$store.dispatch('auth/logout');
+  setup() {
+    const store = useStore();
+
+    const authUser = computed(() => store.getters['auth/authUser']);
+    const isAdmin = computed(() => store.getters['auth/isAdmin']);
+
+    function logout() {
+      store.dispatch('auth/logout');
     }
+
+    return {
+      apiUrl: import.meta.env.VITE_APP_API_URL,
+      authUser,
+      isAdmin,
+      logout
+    };
   }
 });
 </script>

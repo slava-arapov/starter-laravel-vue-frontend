@@ -41,17 +41,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { Field, Form } from 'vee-validate';
-
-declare interface BaseComponentData {
-  email: string | null,
-  error?: Error | string | string[] | null,
-  message: string | null
-}
 
 export default defineComponent({
   name: 'ForgotPasswordForm',
@@ -60,31 +55,31 @@ export default defineComponent({
     Field,
     FlashMessage
   },
-  data(): BaseComponentData {
-    return {
-      email: '',
-      error: null,
-      message: null
-    };
-  },
-  methods: {
-    async forgotPassword(): Promise<void> {
-      this.error = null;
-      this.message = null;
+  setup() {
+    const email = ref('');
+
+    const error: Ref<Error | string | string[] | null> = ref(null);
+    const message: Ref<string | null> = ref(null);
+
+    const form: Ref<HTMLFormElement | null> = ref(null);
+
+    async function forgotPassword(): Promise<void> {
+      error.value = null;
+      message.value = null;
       const payload = {
-        email: this.email
+        email: email.value
       };
 
       try {
         await AuthService.forgotPassword(payload);
-        this.message = 'Reset password email sent.';
-      } catch (error) {
-        console.log(error);
+        message.value = 'Reset password email sent.';
+      } catch (e) {
+        console.log(e);
 
-        if (error.response.data.errors) {
-          (this.$refs.form as HTMLFormElement).setErrors(error.response.data.errors);
+        if (e.response.data.errors && form.value !== null) {
+          form.value.setErrors(e.response.data.errors);
         } else {
-          this.error = getError(error);
+          error.value = getError(e);
         }
       }
       /*
@@ -93,6 +88,15 @@ export default defineComponent({
         .catch((error) => (this.error = getError(error)));
        */
     }
+
+    return {
+      email,
+      error,
+      message,
+      forgotPassword
+    };
+  },
+  methods: {
   }
 });
 </script>

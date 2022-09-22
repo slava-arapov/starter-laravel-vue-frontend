@@ -44,33 +44,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { computed, defineComponent } from 'vue';
+import type { Ref } from 'vue';
+import { useStore } from 'vuex';
 import VerifyEmail from '@/components/VerifyEmail.vue';
 import { mdiAccountCircle, mdiCheckDecagram } from '@mdi/js';
-
-declare interface BaseComponentData {
-  mdiIcons: Record<string, string>,
-  apiUrl: string | null
-}
 
 export default defineComponent({
   name: 'AuthUser',
   components: {
     VerifyEmail
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  data(): BaseComponentData {
-    return {
-      mdiIcons: {
-        mdiAccountCircle,
-        mdiCheckDecagram
-      },
-      apiUrl: import.meta.env.VITE_APP_API_URL
+  setup() {
+    const store = useStore();
+
+    const mdiIcons = {
+      mdiAccountCircle,
+      mdiCheckDecagram
     };
-  },
-  computed: {
-    ...mapGetters('auth', ['authUser'])
+
+    const apiUrl: Ref<string | null> = import.meta.env.VITE_APP_API_URL;
+
+    return {
+      mdiIcons,
+      apiUrl,
+      authUser: computed(() => store.getters['auth/authUser'])
+    };
   }
 });
 </script>

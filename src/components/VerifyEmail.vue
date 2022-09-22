@@ -16,42 +16,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { computed, defineComponent, ref } from 'vue';
+import type { Ref } from 'vue';
+import { useStore } from 'vuex';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-
-declare interface BaseComponentData {
-  error?: Error | string | string[] | null,
-  message: string | null
-}
 
 export default defineComponent({
   name: 'VerifyEmail',
   components: {
     FlashMessage
   },
-  data(): BaseComponentData {
-    return {
-      error: null,
-      message: null
-    };
-  },
-  computed: {
-    ...mapGetters('auth', ['authUser'])
-  },
-  methods: {
-    sendVerification() {
-      this.error = null;
-      this.message = null;
+  setup() {
+    const store = useStore();
+
+    const error: Ref<Error | string | string[] | null> = ref(null);
+    const message: Ref<string | null> = ref(null);
+
+    const authUser = computed(() => store.getters['auth/authUser']);
+
+    function sendVerification() {
+      error.value = null;
+      message.value = null;
       const payload = {
-        user: this.authUser.id
+        user: authUser.value.id
       };
       AuthService.sendVerification(payload)
-        .then(() => (this.message = 'Verification email sent.'))
-        .catch((error) => (this.error = getError(error)));
+        .then(() => (message.value = 'Verification email sent.'))
+        .catch((e) => (error.value = getError(e)));
     }
+
+    return {
+      error,
+      message,
+      authUser,
+      sendVerification
+    };
   }
 });
 </script>
