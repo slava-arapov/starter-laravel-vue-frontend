@@ -8,7 +8,7 @@ The starter is decoupled into two parts:
 
 ## Features and Dependencies
 * Vue 3 (Options API), Vue Router 4, Vuex 4, ESLint, Vite
-* Vue Components with TypeScript declarations
+* Vue Components with TypeScript declarations and [vue-tsc](https://github.com/johnsoncodehk/volar/tree/master/vue-language-tools/vue-tsc) installed
 * Vuetify 3 Beta
 * VeeValidate 4
 * Material Design Icons — [SVG custom import](https://vuetifyjs.com/en/features/icon-fonts/#material-design-icons-js-svg)
@@ -60,6 +60,11 @@ npm run build
 ### Lints and fixes files
 ```
 npm run lint
+```
+
+### Runs vue-tsc type-checking tool
+```
+npm run tsc
 ```
 
 ### Customize configuration
