@@ -61,7 +61,7 @@
     <transition name="fade">
       <BasePagination
         path="users"
-        :meta="meta"
+        v-model="meta"
         :links="links"
         action="user/paginateUsers"
         v-if="meta && meta.last_page > 1"
@@ -76,6 +76,7 @@ import FlashMessage from '@/components/FlashMessage.vue';
 import BasePagination from '@/components/BasePagination.vue';
 import { useRoute } from 'vue-router';
 import { computed, defineComponent, watch } from 'vue';
+import type { Ref } from 'vue';
 import { mdiAccountCircle, mdiEmail } from '@mdi/js';
 
 export default defineComponent({
@@ -90,7 +91,7 @@ export default defineComponent({
       mdiEmail
     };
 
-    const apiUrl = import.meta.env.VITE_APP_API_URL;
+    const apiUrl: Ref<string | null> = import.meta.env.VITE_APP_API_URL;
 
     watch(() => route, (to) => {
       const currentPage = (typeof to.query.page === 'string') ? to.query.page : '1';

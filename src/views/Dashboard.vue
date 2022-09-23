@@ -109,6 +109,7 @@
 <script lang="ts">
 import { useStore } from 'vuex';
 import { computed, defineComponent } from 'vue';
+import type { Ref } from 'vue';
 import { mdiAccountCircle } from '@mdi/js';
 
 export default defineComponent({
@@ -120,7 +121,7 @@ export default defineComponent({
       mdiAccountCircle
     };
 
-    const apiUrl = import.meta.env.VITE_APP_API_URL;
+    const apiUrl: Ref<string | null> = import.meta.env.VITE_APP_API_URL;
 
     return {
       mdiIcons,
