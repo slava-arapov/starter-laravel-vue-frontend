@@ -30,17 +30,19 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   // name: 'FlashMessage',
   props: {
     message: {
-      type: String,
+      type: String as PropType<string | null>,
+      required: false,
       default: null
     },
     error: {
-      type: [Object, String, Error],
+      type: null as unknown as PropType<object | string | string[] | Error | null>,
+      required: false,
       default: null
     }
   },

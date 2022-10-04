@@ -3,7 +3,7 @@
     <transition name="fade" mode="out-in">
       <FlashMessage
         message="loading..."
-        v-if="loading && !users.length"
+        v-if="loading && (!users || !users.length)"
         key="loading"
       />
       <v-table v-else>
@@ -61,8 +61,9 @@
     <transition name="fade">
       <BasePagination
         path="users"
-        v-model="meta"
+        v-model="meta.current_page"
         :links="links"
+        :meta="meta"
         action="user/paginateUsers"
         v-if="meta && meta.last_page > 1"
       />
@@ -78,6 +79,8 @@ import { useRoute } from 'vue-router';
 import { computed, defineComponent, watch } from 'vue';
 import type { Ref } from 'vue';
 import { mdiAccountCircle, mdiEmail } from '@mdi/js';
+import { Meta } from '@/interfaces/Meta';
+import { User } from '@/interfaces/User';
 
 export default defineComponent({
   components: { FlashMessage, BasePagination },
@@ -106,8 +109,8 @@ export default defineComponent({
       apiUrl,
       loading: computed(() => store.getters['user/loading']),
       error: computed(() => store.getters['user/error']),
-      users: computed(() => store.getters['user/users']),
-      meta: computed(() => store.getters['user/meta']),
+      users: computed((): User[] | null => store.getters['user/users']),
+      meta: computed((): Meta | null => store.getters['user/meta']),
       links: computed(() => store.getters['user/links'])
     };
   }

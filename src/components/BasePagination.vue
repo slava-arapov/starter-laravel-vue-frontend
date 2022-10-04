@@ -1,28 +1,23 @@
 <template>
-  <div aria-label="Pagination">
+  <div aria-label="Pagination" v-if="meta !== null">
     <p class="text-sm text-gray-500">
-      Page {{ value.current_page }} of {{ value.last_page }}
+      Page {{ meta.current_page }} of {{ meta.last_page }}
     </p>
     <div class="text-center">
       <v-pagination
-        v-model="value.current_page"
-        :length="value.last_page"
+        v-model="currentPage"
+        :length="meta.last_page"
       ></v-pagination>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, watch } from 'vue';
+import { computed, defineComponent, PropType, watch } from 'vue';
+import { Meta } from '@/interfaces/Meta';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
-/**
- * @typedef {Meta} modelValue
- * @property {string} current_page
- * @property {string} last_page
- *
- */
 export default defineComponent({
   props: {
     action: {
@@ -34,7 +29,11 @@ export default defineComponent({
       default: null
     },
     modelValue: {
-      type: Object,
+      type: Number,
+      required: true
+    },
+    meta: {
+      type: Object as PropType<Meta | null>,
       required: true
     },
     links: {
@@ -49,28 +48,30 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
 
-    const value = computed({
-      get() {
+    const currentPage = computed({
+      get(): number {
         return props.modelValue;
       },
-      set(value) {
+      set(value: number) {
         context.emit('update:modelValue', value);
       }
     });
 
-    watch(() => props.modelValue.current_page, () => {
-      store.dispatch(props.action, props.modelValue.path + '/?page=' + (props.modelValue.current_page).toString()).then(() => {
-        if (props.path) {
-          router.push({
-            path: props.path,
-            query: { page: (props.modelValue.current_page).toString() }
-          });
-        }
-      });
+    watch(() => props.meta?.current_page, () => {
+      if (props.meta) {
+        store.dispatch(props.action, props.meta.path + '/?page=' + (props.meta.current_page).toString()).then(() => {
+          if (props.path && props.meta) {
+            router.push({
+              path: props.path,
+              query: { page: (props.meta.current_page).toString() }
+            });
+          }
+        });
+      }
     });
 
     return {
-      value
+      currentPage
     };
   }
 });
