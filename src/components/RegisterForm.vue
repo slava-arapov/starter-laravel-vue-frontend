@@ -88,67 +88,43 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, Ref, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
+import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { Form, Field } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 import { useRouter } from 'vue-router';
+const router = useRouter();
 
-export default defineComponent({
-  name: 'RegisterForm',
-  components: {
-    Form,
-    Field,
-    FlashMessage
-  },
-  setup() {
-    const router = useRouter();
+const mdiIcons = {
+  mdiEye,
+  mdiEyeOff
+};
+const showPass = ref(false);
+const name: Ref<string | null> = ref(null);
+const email: Ref<string | null> = ref(null);
+const password: Ref<string | null> = ref(null);
+const passwordConfirm: Ref<string | null> = ref(null);
+const nameRules = 'required';
+const emailRules = 'required|email';
+const passwordRules = 'required';
+const passwordConfirmRules = 'required|password:@password';
+const error: Ref<Error | string | string[] | null> = ref(null);
 
-    const mdiIcons = {
-      mdiEye,
-      mdiEyeOff
-    };
-    const showPass = ref(false);
-    const name: Ref<string | null> = ref(null);
-    const email: Ref<string | null> = ref(null);
-    const password: Ref<string | null> = ref(null);
-    const passwordConfirm: Ref<string | null> = ref(null);
-    const nameRules = 'required';
-    const emailRules = 'required|email';
-    const passwordRules = 'required';
-    const passwordConfirmRules = 'required|password:@password';
-    const error: Ref<Error | string | string[] | null> = ref(null);
+function registerUser() {
+  error.value = null;
+  const payload = {
+    name: name.value,
+    email: email.value,
+    password: password.value,
+    password_confirmation: passwordConfirm.value
+  };
+  AuthService.registerUser(payload)
+    .then(() => router.push('/dashboard'))
+    .catch((e) => (error.value = getError(e)));
+}
 
-    function registerUser() {
-      error.value = null;
-      const payload = {
-        name: name.value,
-        email: email.value,
-        password: password.value,
-        password_confirmation: passwordConfirm.value
-      };
-      AuthService.registerUser(payload)
-        .then(() => router.push('/dashboard'))
-        .catch((e) => (error.value = getError(e)));
-    }
-
-    return {
-      mdiIcons,
-      showPass,
-      name,
-      email,
-      password,
-      passwordConfirm,
-      nameRules,
-      emailRules,
-      passwordRules,
-      passwordConfirmRules,
-      error,
-      registerUser
-    };
-  }
-});
 </script>

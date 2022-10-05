@@ -4,8 +4,8 @@
   </component>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, watch } from 'vue';
+<script setup lang="ts">
+import { computed, onMounted, watch } from 'vue';
 import { useTheme } from 'vuetify';
 import { configure, defineRule } from 'vee-validate';
 import { email, image, required } from '@vee-validate/rules';
@@ -35,71 +35,60 @@ if (userLang === 'ru') {
   setLocale('en');
 }
 
-export default defineComponent({
-  name: 'App',
-  setup () {
-    const theme = useTheme();
-    const route = useRoute();
-    const store = useStore();
+const theme = useTheme();
+const route = useRoute();
+const store = useStore();
 
-    const layout = computed(() => {
-      return (route.meta?.layout || defaultLayout) + '-layout';
-    });
-
-    function changeTheme (themeName: string) {
-      theme.global.name.value = themeName;
-    }
-
-    function refreshTheme() {
-      let themeName = store.state.settings.theme;
-
-      if (themeName === 'system') {
-        const systemThemeIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        themeName = systemThemeIsDark ? 'dark' : 'light';
-      }
-
-      // need to set 0 sec timeout to set the dark more after mounted event, due to some bug in the framework
-      setTimeout(() => changeTheme(themeName), 0);
-    }
-
-    function addThemeChangeEventListener() {
-      const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-      try {
-        // Chrome & Firefox
-        darkMediaQuery.addEventListener('change', () => {
-          refreshTheme();
-        });
-      } catch (e1) {
-        try {
-          // Safari
-          // noinspection JSDeprecatedSymbols
-          darkMediaQuery.addListener(() => {
-            refreshTheme();
-          });
-        } catch (e2) {
-          console.error(e2);
-        }
-      }
-    }
-
-    onMounted(() => {
-      const html = document.documentElement;
-      html.setAttribute('lang', userLang);
-      refreshTheme();
-      addThemeChangeEventListener();
-    });
-
-    watch(() => store.state.settings.theme, () => {
-      refreshTheme();
-    });
-
-    return {
-      theme,
-      route,
-      store,
-      layout
-    };
-  }
+const layout = computed(() => {
+  return (route.meta?.layout || defaultLayout) + '-layout';
 });
+
+function changeTheme (themeName: string) {
+  theme.global.name.value = themeName;
+}
+
+function refreshTheme() {
+  let themeName = store.state.settings.theme;
+
+  if (themeName === 'system') {
+    const systemThemeIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    themeName = systemThemeIsDark ? 'dark' : 'light';
+  }
+
+  // need to set 0 sec timeout to set the dark more after mounted event, due to some bug in the framework
+  setTimeout(() => changeTheme(themeName), 0);
+}
+
+function addThemeChangeEventListener() {
+  const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+  try {
+    // Chrome & Firefox
+    darkMediaQuery.addEventListener('change', () => {
+      refreshTheme();
+    });
+  } catch (e1) {
+    try {
+      // Safari
+      // noinspection JSDeprecatedSymbols
+      darkMediaQuery.addListener(() => {
+        refreshTheme();
+      });
+    } catch (e2) {
+      console.error(e2);
+    }
+  }
+}
+
+onMounted(() => {
+  const html = document.documentElement;
+  html.setAttribute('lang', userLang);
+  refreshTheme();
+  addThemeChangeEventListener();
+});
+
+watch(() => store.state.settings.theme, () => {
+  refreshTheme();
+});
+
 </script>

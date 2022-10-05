@@ -7,20 +7,17 @@
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 
-export default defineComponent({
-  // name: 'BaseBtn',
-  props: {
-    type: {
-      type: String,
-      default: 'submit'
-    },
-    text: {
-      type: String,
-      default: 'Submit'
-    }
+const props = defineProps({
+  type: {
+    type: String,
+    default: 'submit'
+  },
+  text: {
+    type: String,
+    default: 'Submit'
   }
 });
+
 </script>

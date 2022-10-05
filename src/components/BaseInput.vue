@@ -21,56 +21,46 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 
-export default defineComponent({
-  // name: 'BaseInput',
-  inheritAttrs: false,
-  props: {
-    name: {
-      type: String,
-      required: true
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    value: {
-      type: [String, Number]
-    },
-    type: {
-      type: String,
-      default: 'text'
-    },
-    showLabel: {
-      type: Boolean,
-      default: true
-    },
-    required: {
-      type: Boolean,
-      default: false
-    },
-    placeholder: {
-      type: String,
-      default: null
-    },
-    autocomplete: {
-      type: String,
-      default: null
-    }
+const props = defineProps({
+  name: {
+    type: String,
+    required: true
   },
-  emits: [
-    'input'
-  ],
-  setup(props, context) {
-    function updateValue(event: Event) {
-      return context.emit('input', (event.target as HTMLInputElement).value);
-    }
-
-    return {
-      updateValue
-    };
+  label: {
+    type: String,
+    default: ''
+  },
+  value: {
+    type: [String, Number]
+  },
+  type: {
+    type: String,
+    default: 'text'
+  },
+  showLabel: {
+    type: Boolean,
+    default: true
+  },
+  required: {
+    type: Boolean,
+    default: false
+  },
+  placeholder: {
+    type: String,
+    default: null
+  },
+  autocomplete: {
+    type: String,
+    default: null
   }
 });
+
+const emit = defineEmits(['input']);
+
+function updateValue(event: Event) {
+  return emit('input', (event.target as HTMLInputElement).value);
+}
+
 </script>

@@ -53,8 +53,8 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
 import type { Ref } from 'vue';
 import { useStore } from 'vuex';
 import { getError } from '@/utils/helpers';
@@ -62,57 +62,37 @@ import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { Field, Form } from 'vee-validate';
 
-export default defineComponent({
-  name: 'AuthUserForm',
-  components: {
-    Form,
-    Field,
-    FlashMessage
-  },
-  setup() {
-    const store = useStore();
+const store = useStore();
 
-    const name: Ref<string | null> = ref(null);
-    const email: Ref<string | null> = ref(null);
+const name: Ref<string | null> = ref(null);
+const email: Ref<string | null> = ref(null);
 
-    const nameRules = 'required';
-    const emailRules = 'required|email';
+const nameRules = 'required';
+const emailRules = 'required|email';
 
-    const error: Ref<Error | string | string[] | null> = ref(null);
-    const message: Ref<string | null> = ref(null);
+const error: Ref<Error | string | string[] | null> = ref(null);
+const message: Ref<string | null> = ref(null);
 
-    const authUser = computed(() => store.getters['auth/authUser']);
+const authUser = computed(() => store.getters['auth/authUser']);
 
-    function updateUser() {
-      error.value = null;
-      message.value = null;
+function updateUser() {
+  error.value = null;
+  message.value = null;
 
-      const payload = {
-        name: name.value,
-        email: email.value
-      };
+  const payload = {
+    name: name.value,
+    email: email.value
+  };
 
-      AuthService.updateUser(payload)
-        .then(() => store.dispatch('auth/getAuthUser'))
-        .then(() => (message.value = 'User updated.'))
-        .catch((error) => (error.value = getError(error)));
-    }
+  AuthService.updateUser(payload)
+    .then(() => store.dispatch('auth/getAuthUser'))
+    .then(() => (message.value = 'User updated.'))
+    .catch((error) => (error.value = getError(error)));
+}
 
-    onMounted(() => {
-      name.value = authUser.value.name;
-      email.value = authUser.value.email;
-    });
-
-    return {
-      name,
-      email,
-      nameRules,
-      emailRules,
-      error,
-      message,
-      authUser,
-      updateUser
-    };
-  }
+onMounted(() => {
+  name.value = authUser.value.name;
+  email.value = authUser.value.email;
 });
+
 </script>

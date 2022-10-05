@@ -29,53 +29,44 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+<script setup lang="ts">
+import { computed, PropType } from 'vue';
 
-export default defineComponent({
-  // name: 'FlashMessage',
-  props: {
-    message: {
-      type: String as PropType<string | null>,
-      required: false,
-      default: null
-    },
-    error: {
-      type: null as unknown as PropType<object | string | string[] | Error | null>,
-      required: false,
-      default: null
-    }
+// eslint-disable-next-line no-undef
+const props = defineProps({
+  message: {
+    type: String as PropType<string | null>,
+    required: false,
+    default: null
   },
-  setup(props) {
-    // eslint-disable-next-line
-    function getType(obj: any) {
-      return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
-    }
-
-    function getErrors (key: string | number) {
-      if (props.error && getType(props.error) === 'object') {
-        return (props.error as Record<string | number, string>)[key];
-      }
-      return null;
-    }
-
-    const errorKeys = computed(() => {
-      if (!props.error || getType(props.error) === 'string') {
-        return null;
-      }
-      return Object.keys(props.error);
-    });
-
-    function titleCase(value: string) {
-      return value.replace('_', ' ');
-    }
-
-    return {
-      errorKeys,
-      getType,
-      getErrors,
-      titleCase
-    };
+  error: {
+    type: null as unknown as PropType<object | string | string[] | Error | null>,
+    required: false,
+    default: null
   }
 });
+
+// eslint-disable-next-line
+function getType(obj: any) {
+  return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
+}
+
+function getErrors (key: string | number) {
+  if (props.error && getType(props.error) === 'object') {
+    return (props.error as Record<string | number, string>)[key];
+  }
+  return null;
+}
+
+const errorKeys = computed(() => {
+  if (!props.error || getType(props.error) === 'string') {
+    return null;
+  }
+  return Object.keys(props.error);
+});
+
+function titleCase(value: string) {
+  return value.replace('_', ' ');
+}
+
 </script>

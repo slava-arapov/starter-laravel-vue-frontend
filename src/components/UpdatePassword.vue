@@ -77,8 +77,8 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
@@ -86,53 +86,32 @@ import FlashMessage from '@/components/FlashMessage.vue';
 import { Form, Field } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 
-export default defineComponent({
-  name: 'UpdatePassword',
-  components: {
-    Form,
-    Field,
-    FlashMessage
-  },
-  setup() {
-    const mdiIcons = {
-      mdiEye,
-      mdiEyeOff
-    };
+const mdiIcons = {
+  mdiEye,
+  mdiEyeOff
+};
 
-    const showPass = ref(false);
-    const currentPassword: Ref<string | null> = ref(null);
-    const password: Ref<string | null> = ref(null);
-    const passwordConfirm: Ref<string | null> = ref(null);
+const showPass = ref(false);
+const currentPassword: Ref<string | null> = ref(null);
+const password: Ref<string | null> = ref(null);
+const passwordConfirm: Ref<string | null> = ref(null);
 
-    const passwordRules = 'required';
+const passwordRules = 'required';
 
-    const error: Ref<Error | string | string[] | null> = ref(null);
-    const message: Ref<string | null> = ref(null);
+const error: Ref<Error | string | string[] | null> = ref(null);
+const message: Ref<string | null> = ref(null);
 
-    function updatePassword() {
-      error.value = null;
-      message.value = null;
-      const payload = {
-        current_password: currentPassword.value,
-        password: password.value,
-        password_confirmation: passwordConfirm.value
-      };
-      AuthService.updatePassword(payload)
-        .then(() => (message.value = 'Password updated.'))
-        .catch((e) => (error.value = getError(e)));
-    }
+function updatePassword() {
+  error.value = null;
+  message.value = null;
+  const payload = {
+    current_password: currentPassword.value,
+    password: password.value,
+    password_confirmation: passwordConfirm.value
+  };
+  AuthService.updatePassword(payload)
+    .then(() => (message.value = 'Password updated.'))
+    .catch((e) => (error.value = getError(e)));
+}
 
-    return {
-      mdiIcons,
-      showPass,
-      currentPassword,
-      password,
-      passwordConfirm,
-      passwordRules,
-      error,
-      message,
-      updatePassword
-    };
-  }
-});
 </script>

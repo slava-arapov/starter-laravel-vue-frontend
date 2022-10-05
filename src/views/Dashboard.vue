@@ -106,28 +106,19 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useStore } from 'vuex';
-import { computed, defineComponent } from 'vue';
+import { computed } from 'vue';
 import type { Ref } from 'vue';
 import { mdiAccountCircle } from '@mdi/js';
 
-export default defineComponent({
-  name: 'Dashboard',
-  setup () {
-    const store = useStore();
+const store = useStore();
 
-    const mdiIcons = {
-      mdiAccountCircle
-    };
+const mdiIcons = {
+  mdiAccountCircle
+};
 
-    const apiUrl: Ref<string | null> = import.meta.env.VITE_APP_API_URL;
+const apiUrl: Ref<string | null> = import.meta.env.VITE_APP_API_URL;
 
-    return {
-      mdiIcons,
-      apiUrl,
-      authUser: computed(() => store.getters['auth/authUser'])
-    };
-  }
-});
+const authUser = computed(() => store.getters['auth/authUser']);
 </script>

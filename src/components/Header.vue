@@ -97,31 +97,23 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { mdiLogout } from '@mdi/js';
 
-export default defineComponent({
-  name: 'Header',
-  setup() {
-    const store = useStore();
+const store = useStore();
 
-    const mdiIcons = {
-      mdiLogout
-    };
+const mdiIcons = {
+  mdiLogout
+};
 
-    function logout() {
-      store.dispatch('auth/logout');
-    }
+const apiUrl = import.meta.env.VITE_APP_API_URL;
+const authUser = computed(() => store.getters['auth/authUser']);
+const isAdmin = computed(() => store.getters['auth/isAdmin']);
 
-    return {
-      mdiIcons,
-      apiUrl: import.meta.env.VITE_APP_API_URL,
-      authUser: computed(() => store.getters['auth/authUser']),
-      isAdmin: computed(() => store.getters['auth/isAdmin']),
-      logout
-    };
-  }
-});
+function logout() {
+  store.dispatch('auth/logout');
+}
+
 </script>

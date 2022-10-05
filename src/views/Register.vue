@@ -8,14 +8,7 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import RegisterForm from '@/components/RegisterForm.vue';
-import { defineComponent } from 'vue';
 
-export default defineComponent({
-  name: 'RegisterView',
-  components: {
-    RegisterForm
-  }
-});
 </script>

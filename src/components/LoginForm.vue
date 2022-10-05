@@ -58,8 +58,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
@@ -68,68 +68,48 @@ import { Field, Form } from 'vee-validate';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
-export default defineComponent({
-  name: 'LoginForm',
-  components: {
-    Form,
-    Field,
-    FlashMessage
-  },
-  setup() {
-    const store = useStore();
-    const router = useRouter();
+const store = useStore();
+const router = useRouter();
 
-    const invalid = ref(false);
-    const email = ref('');
-    const password = ref('');
+const email = ref('');
+const password = ref('');
 
-    const emailRules = 'required|email';
-    const passwordRules = 'required';
+const emailRules = 'required|email';
+const passwordRules = 'required';
 
-    const error: Ref<Error | string | string[] | null> = ref(null);
+const error: Ref<Error | string | string[] | null> = ref(null);
 
-    const form: Ref<HTMLFormElement | null> = ref(null);
+const form: Ref<HTMLFormElement | null> = ref(null);
 
-    async function login(): Promise<void> {
-      const payload = {
-        email: email.value,
-        password: password.value
-      };
-      error.value = null;
-      try {
-        await AuthService.login(payload);
-        const authUser = await store.dispatch('auth/getAuthUser');
-        if (authUser) {
-          await store.dispatch('auth/setGuest', { value: 'isNotGuest' });
-          await router.push('/dashboard');
-        } else {
-          const fetchError = Error(
-            'Unable to fetch user after login, check your API settings.'
-          );
-          fetchError.name = 'Fetch User';
-          console.log(fetchError);
-          error.value = getError(fetchError);
-        }
-      } catch (e) {
-        console.log(e);
-
-        if (e.response.data && e.response.data.errors && form.value !== null) {
-          form.value.setErrors(e.response.data.errors);
-        } else {
-          error.value = getError(e);
-        }
-      }
+async function login(): Promise<void> {
+  const payload = {
+    email: email.value,
+    password: password.value
+  };
+  error.value = null;
+  try {
+    await AuthService.login(payload);
+    const authUser = await store.dispatch('auth/getAuthUser');
+    if (authUser) {
+      await store.dispatch('auth/setGuest', { value: 'isNotGuest' });
+      await router.push('/dashboard');
+    } else {
+      const fetchError = Error(
+        'Unable to fetch user after login, check your API settings.'
+      );
+      fetchError.name = 'Fetch User';
+      console.log(fetchError);
+      error.value = getError(fetchError);
     }
+  } catch (e) {
+    console.log(e);
 
-    return {
-      invalid,
-      email,
-      password,
-      emailRules,
-      passwordRules,
-      error,
-      login
-    };
+    if (e.response.data && e.response.data.errors && form.value !== null) {
+      form.value.setErrors(e.response.data.errors);
+    } else {
+      error.value = getError(e);
+    }
   }
-});
+}
+
 </script>

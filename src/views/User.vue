@@ -22,38 +22,21 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import AuthUser from '@/components/AuthUser.vue';
 import FileUpload from '@/components/FileUpload.vue';
 import AuthUserForm from '@/components/AuthUserForm.vue';
 import UpdatePassword from '@/components/UpdatePassword.vue';
 import { mdiCamera } from '@mdi/js';
-import { defineComponent } from 'vue';
 import { useStore } from 'vuex';
 
-export default defineComponent({
-  name: 'UserView',
-  setup () {
-    const store = useStore();
+const store = useStore();
 
-    const mdiIcons = {
-      mdiCamera
-    };
+const mdiIcons = {
+  mdiCamera
+};
 
-    function updateUser() {
-      store.dispatch('auth/getAuthUser');
-    }
-
-    return {
-      mdiIcons,
-      updateUser
-    };
-  },
-  components: {
-    AuthUser,
-    FileUpload,
-    AuthUserForm,
-    UpdatePassword
-  }
-});
+function updateUser() {
+  store.dispatch('auth/getAuthUser');
+}
 </script>

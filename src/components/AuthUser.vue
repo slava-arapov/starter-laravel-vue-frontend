@@ -43,33 +43,21 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 import type { Ref } from 'vue';
 import { useStore } from 'vuex';
 import VerifyEmail from '@/components/VerifyEmail.vue';
 import { mdiAccountCircle, mdiCheckDecagram } from '@mdi/js';
 
-export default defineComponent({
-  name: 'AuthUser',
-  components: {
-    VerifyEmail
-  },
-  setup() {
-    const store = useStore();
+const store = useStore();
 
-    const mdiIcons = {
-      mdiAccountCircle,
-      mdiCheckDecagram
-    };
+const mdiIcons = {
+  mdiAccountCircle,
+  mdiCheckDecagram
+};
 
-    const apiUrl: Ref<string | null> = import.meta.env.VITE_APP_API_URL;
+const apiUrl: Ref<string | null> = import.meta.env.VITE_APP_API_URL;
 
-    return {
-      mdiIcons,
-      apiUrl,
-      authUser: computed(() => store.getters['auth/authUser'])
-    };
-  }
-});
+const authUser = computed(() => store.getters['auth/authUser']);
 </script>

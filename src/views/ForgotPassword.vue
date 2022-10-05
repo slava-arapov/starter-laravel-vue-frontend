@@ -13,14 +13,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import ForgotPasswordForm from '@/components/ForgotPasswordForm.vue';
 
-export default defineComponent({
-  name: 'ForgotPassword',
-  components: {
-    ForgotPasswordForm
-  }
-});
 </script>

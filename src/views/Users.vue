@@ -71,48 +71,39 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useStore } from 'vuex';
 import FlashMessage from '@/components/FlashMessage.vue';
 import BasePagination from '@/components/BasePagination.vue';
 import { useRoute } from 'vue-router';
-import { computed, defineComponent, watch } from 'vue';
+import { computed, watch } from 'vue';
 import type { Ref } from 'vue';
 import { mdiAccountCircle, mdiEmail } from '@mdi/js';
 import { Meta } from '@/interfaces/Meta';
 import { User } from '@/interfaces/User';
 
-export default defineComponent({
-  components: { FlashMessage, BasePagination },
-  name: 'UsersView',
-  setup () {
-    const store = useStore();
-    const route = useRoute();
+const store = useStore();
+const route = useRoute();
 
-    const mdiIcons = {
-      mdiAccountCircle,
-      mdiEmail
-    };
+const mdiIcons = {
+  mdiAccountCircle,
+  mdiEmail
+};
 
-    const apiUrl: Ref<string | null> = import.meta.env.VITE_APP_API_URL;
+const apiUrl: Ref<string | null> = import.meta.env.VITE_APP_API_URL;
 
-    watch(() => route, (to) => {
-      const currentPage = (typeof to.query.page === 'string') ? to.query.page : '1';
+const loading = computed(() => store.getters['user/loading']);
+const error = computed(() => store.getters['user/error']);
+const users = computed((): User[] | null => store.getters['user/users']);
+const meta = computed((): Meta | null => store.getters['user/meta']);
+const links = computed(() => store.getters['user/links']);
 
-      store.dispatch('user/getUsers', parseInt(currentPage)).then(() => {
-        to.params.page = currentPage;
-      });
-    }, { flush: 'pre', immediate: true, deep: true });
+watch(() => route, (to) => {
+  const currentPage = (typeof to.query.page === 'string') ? to.query.page : '1';
 
-    return {
-      mdiIcons,
-      apiUrl,
-      loading: computed(() => store.getters['user/loading']),
-      error: computed(() => store.getters['user/error']),
-      users: computed((): User[] | null => store.getters['user/users']),
-      meta: computed((): Meta | null => store.getters['user/meta']),
-      links: computed(() => store.getters['user/links'])
-    };
-  }
-});
+  store.dispatch('user/getUsers', parseInt(currentPage)).then(() => {
+    to.params.page = currentPage;
+  });
+}, { flush: 'pre', immediate: true, deep: true });
+
 </script>

@@ -77,68 +77,44 @@
     </v-card>
 </template>
 
-<script>
+<script setup>
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 import { Form, Field } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 import { useRoute } from 'vue-router';
 
-export default defineComponent({
-  name: 'ResetPassword',
-  setup () {
-    const route = useRoute();
+const route = useRoute();
 
-    const mdiIcons = {
-      mdiEye,
-      mdiEyeOff
-    };
+const mdiIcons = {
+  mdiEye,
+  mdiEyeOff
+};
 
-    const email = ref(null);
-    const password = ref(null);
-    const passwordConfirm = ref(null);
-    const showPass = ref(false);
+const email = ref(null);
+const password = ref(null);
+const passwordConfirm = ref(null);
+const showPass = ref(false);
 
-    const emailRules = 'required|email';
-    const passwordRules = 'required';
-    const passwordConfirmRules = 'required|password:@password';
-    const error = ref(null);
-    const message = ref(null);
+const emailRules = 'required|email';
+const passwordRules = 'required';
+const passwordConfirmRules = 'required|password:@password';
+const error = ref(null);
+const message = ref(null);
 
-    function resetPassword() {
-      error.value = null;
-      message.value = null;
-      const payload = {
-        email: email.value,
-        password: password.value,
-        password_confirmation: passwordConfirm.value,
-        token: route?.query?.token
-      };
-      AuthService.resetPassword(payload)
-        .then(() => (message.value = 'Password reset.'))
-        .catch((error) => (error.value = getError(error)));
-    }
-
-    return {
-      mdiIcons,
-      email,
-      password,
-      passwordConfirm,
-      showPass,
-      emailRules,
-      passwordRules,
-      passwordConfirmRules,
-      error,
-      message,
-      resetPassword
-    };
-  },
-  components: {
-    Form,
-    Field,
-    FlashMessage
-  }
-});
+function resetPassword() {
+  error.value = null;
+  message.value = null;
+  const payload = {
+    email: email.value,
+    password: password.value,
+    password_confirmation: passwordConfirm.value,
+    token: route?.query?.token
+  };
+  AuthService.resetPassword(payload)
+    .then(() => (message.value = 'Password reset.'))
+    .catch((error) => (error.value = getError(error)));
+}
 </script>

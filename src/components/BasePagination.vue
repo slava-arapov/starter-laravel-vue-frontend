@@ -12,67 +12,59 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType, watch } from 'vue';
+<script setup lang="ts">
+import { computed, PropType, watch } from 'vue';
 import { Meta } from '@/interfaces/Meta';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
-export default defineComponent({
-  props: {
-    action: {
-      type: String,
-      required: true
-    },
-    path: {
-      type: String,
-      default: null
-    },
-    modelValue: {
-      type: Number,
-      required: true
-    },
-    meta: {
-      type: Object as PropType<Meta | null>,
-      required: true
-    },
-    links: {
-      type: Object,
-      required: true
-    }
+const props = defineProps({
+  action: {
+    type: String,
+    required: true
   },
-  emits: [
-    'update:modelValue'
-  ],
-  setup(props, context) {
-    const store = useStore();
-    const router = useRouter();
+  path: {
+    type: String,
+    default: null
+  },
+  modelValue: {
+    type: Number,
+    required: true
+  },
+  meta: {
+    type: Object as PropType<Meta | null>,
+    required: true
+  },
+  links: {
+    type: Object,
+    required: true
+  }
+});
 
-    const currentPage = computed({
-      get(): number {
-        return props.modelValue;
-      },
-      set(value: number) {
-        context.emit('update:modelValue', value);
-      }
-    });
+const emit = defineEmits(['update:modelValue']);
+const store = useStore();
+const router = useRouter();
 
-    watch(() => props.meta?.current_page, () => {
-      if (props.meta) {
-        store.dispatch(props.action, props.meta.path + '/?page=' + (props.meta.current_page).toString()).then(() => {
-          if (props.path && props.meta) {
-            router.push({
-              path: props.path,
-              query: { page: (props.meta.current_page).toString() }
-            });
-          }
+const currentPage = computed({
+  get(): number {
+    return props.modelValue;
+  },
+  set(value: number) {
+    emit('update:modelValue', value);
+  }
+});
+
+watch(() => props.meta?.current_page, () => {
+  if (props.meta) {
+    store.dispatch(props.action, props.meta.path + '/?page=' + (props.meta.current_page).toString()).then(() => {
+      if (props.path && props.meta) {
+        router.push({
+          path: props.path,
+          query: { page: (props.meta.current_page).toString() }
         });
       }
     });
-
-    return {
-      currentPage
-    };
   }
 });
+
 </script>

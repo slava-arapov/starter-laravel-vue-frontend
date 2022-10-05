@@ -14,30 +14,20 @@
   </v-footer>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import ThemeControl from '@/components/ThemeControl.vue';
 
-export default defineComponent({
-  name: 'Footer',
-  components: { ThemeControl },
-  setup() {
-    const store = useStore();
+const store = useStore();
 
-    const authUser = computed(() => store.getters['auth/authUser']);
-    const isAdmin = computed(() => store.getters['auth/isAdmin']);
+const authUser = computed(() => store.getters['auth/authUser']);
+const isAdmin = computed(() => store.getters['auth/isAdmin']);
 
-    function logout() {
-      store.dispatch('auth/logout');
-    }
+const apiUrl = import.meta.env.VITE_APP_API_URL;
 
-    return {
-      apiUrl: import.meta.env.VITE_APP_API_URL,
-      authUser,
-      isAdmin,
-      logout
-    };
-  }
-});
+function logout() {
+  store.dispatch('auth/logout');
+}
+
 </script>
