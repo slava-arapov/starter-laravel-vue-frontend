@@ -13,35 +13,27 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, watch } from 'vue';
+import { computed, watch } from 'vue';
 import { Meta } from '@/interfaces/Meta';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import { Links } from '@/interfaces/Links';
 
-const props = defineProps({
-  action: {
-    type: String,
-    required: true
-  },
-  path: {
-    type: String,
-    default: null
-  },
-  modelValue: {
-    type: Number,
-    required: true
-  },
-  meta: {
-    type: Object as PropType<Meta | null>,
-    required: true
-  },
-  links: {
-    type: Object,
-    required: true
-  }
-});
+interface Props {
+  action: string,
+  path?: string,
+  modelValue: number,
+  meta: Meta | null,
+  links: Links | null
+}
 
-const emit = defineEmits(['update:modelValue']);
+interface Emits {
+  (e: 'update:modelValue', value: number): void
+}
+
+const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
+
 const store = useStore();
 const router = useRouter();
 

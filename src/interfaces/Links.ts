@@ -1,5 +1,6 @@
-export interface Meta {
-  current_page: number,
-  last_page: number,
-  path: string
+export interface Links {
+  first?: string,
+  last?: string,
+  prev?: string,
+  next?: string
 }

@@ -18,11 +18,10 @@
 
 <script setup lang='ts'>
 
-const props = defineProps({
-  msg: {
-    type: String,
-    default: null
-  }
-});
+interface Props {
+  msg?: string
+}
+
+const props = defineProps<Props>();
 
 </script>

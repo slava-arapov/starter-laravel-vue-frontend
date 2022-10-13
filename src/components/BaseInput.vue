@@ -22,42 +22,31 @@
 </template>
 
 <script setup lang="ts">
+interface Props {
+  name: string,
+  label: string,
+  value: string | number,
+  type: string,
+  showLabel: boolean,
+  required: boolean,
+  placeholder?: string | null,
+  autocomplete?: string | null
+}
 
-const props = defineProps({
-  name: {
-    type: String,
-    required: true
-  },
-  label: {
-    type: String,
-    default: ''
-  },
-  value: {
-    type: [String, Number]
-  },
-  type: {
-    type: String,
-    default: 'text'
-  },
-  showLabel: {
-    type: Boolean,
-    default: true
-  },
-  required: {
-    type: Boolean,
-    default: false
-  },
-  placeholder: {
-    type: String,
-    default: null
-  },
-  autocomplete: {
-    type: String,
-    default: null
-  }
+const props = withDefaults(defineProps<Props>(), {
+  label: '',
+  type: 'text',
+  showLabel: true,
+  required: true,
+  placeholder: null,
+  autocomplete: null
 });
 
-const emit = defineEmits(['input']);
+interface Emits {
+  (e: 'input', value: string): void
+}
+
+const emit = defineEmits<Emits>();
 
 function updateValue(event: Event) {
   return emit('input', (event.target as HTMLInputElement).value);

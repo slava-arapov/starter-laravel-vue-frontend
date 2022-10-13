@@ -48,26 +48,23 @@ import FlashMessage from '@/components/FlashMessage.vue';
 import { Field, Form } from 'vee-validate';
 
 // setInteractionMode('eager');
-const props = defineProps({
-  fileTypes: {
-    type: Array,
-    default: null
-  },
-  endpoint: {
-    type: String,
-    required: true
-  },
-  label: {
-    type: String,
-    default: ''
-  },
-  icon: {
-    type: String,
-    default: undefined
-  }
-});
 
-const emit = defineEmits(['fileUploaded']);
+interface Props {
+  fileTypes?: Array<string>,
+  endpoint: string,
+  label: string,
+  icon: string
+}
+
+interface Emits {
+  (e: 'fileUploaded'): void
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  label: '',
+  icon: undefined
+});
+const emit = defineEmits<Emits>();
 
 const file: Ref<Blob | null> = ref(null);
 

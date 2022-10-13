@@ -30,21 +30,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType } from 'vue';
+import { computed } from 'vue';
 
-// eslint-disable-next-line no-undef
-const props = defineProps({
-  message: {
-    type: String as PropType<string | null>,
-    required: false,
-    default: null
-  },
-  error: {
-    type: null as unknown as PropType<object | string | string[] | Error | null>,
-    required: false,
-    default: null
-  }
-});
+interface Props {
+  message?: string | null,
+  error?: object | string | string[] | Error | null
+}
+
+const props = defineProps<Props>();
 
 // eslint-disable-next-line
 function getType(obj: any) {

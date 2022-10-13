@@ -8,16 +8,14 @@
 </template>
 
 <script setup lang="ts">
+interface Props {
+  type: string,
+  text: string
+}
 
-const props = defineProps({
-  type: {
-    type: String,
-    default: 'submit'
-  },
-  text: {
-    type: String,
-    default: 'Submit'
-  }
+const props = withDefaults(defineProps<Props>(), {
+  type: 'submit',
+  text: 'Submit'
 });
 
 </script>
