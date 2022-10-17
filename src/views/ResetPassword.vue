@@ -9,7 +9,7 @@
           ref="form"
           class="px-5 pb-5"
           lazy-validation
-          @submit.prevent="resetPassword"
+          @submit="resetPassword"
           v-slot="{ meta }"
         >
           <Field
@@ -77,11 +77,12 @@
     </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref } from 'vue';
+import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { ref } from 'vue';
 import { Form, Field } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 import { useRoute } from 'vue-router';
@@ -93,16 +94,16 @@ const mdiIcons = {
   mdiEyeOff
 };
 
-const email = ref(null);
-const password = ref(null);
-const passwordConfirm = ref(null);
+const email: Ref<string | null> = ref(null);
+const password: Ref<string | null> = ref(null);
+const passwordConfirm: Ref<string | null> = ref(null);
 const showPass = ref(false);
 
 const emailRules = 'required|email';
 const passwordRules = 'required';
-const passwordConfirmRules = 'required|password:@password';
+const passwordConfirmRules = 'required|confirmed:@password';
 const error = ref(null);
-const message = ref(null);
+const message: Ref<string | null> = ref(null);
 
 function resetPassword() {
   error.value = null;
@@ -111,7 +112,7 @@ function resetPassword() {
     email: email.value,
     password: password.value,
     password_confirmation: passwordConfirm.value,
-    token: route?.query?.token
+    token: (typeof route.query.token === 'string') ? route.query.token : ''
   };
   AuthService.resetPassword(payload)
     .then(() => (message.value = 'Password reset.'))

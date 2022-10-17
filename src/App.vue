@@ -8,16 +8,17 @@
 import { computed, onMounted, watch } from 'vue';
 import { useTheme } from 'vuetify';
 import { configure, defineRule } from 'vee-validate';
-import { email, image, required } from '@vee-validate/rules';
+import { email, image, required, confirmed } from '@vee-validate/rules';
 import { localize, setLocale } from '@vee-validate/i18n';
 import ru from '@/locale/ru.json';
 import en from '@/locale/en.json';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
-defineRule('required', required);
 defineRule('email', email);
 defineRule('image', image);
+defineRule('required', required);
+defineRule('confirmed', confirmed);
 
 const defaultLayout = 'default';
 const userLang: string = /^ru\b/.test(navigator.language) ? 'ru' : 'en';
