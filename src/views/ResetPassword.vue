@@ -4,86 +4,61 @@
       width="20rem"
     >
       <v-card-title>Reset Password</v-card-title>
-        <Form
-          as="v-form"
-          ref="form"
+        <v-form
           class="px-5 pb-5"
-          lazy-validation
-          @submit="resetPassword"
-          v-slot="{ meta }"
+          @submit.prevent="resetPassword"
         >
-          <Field
+          <v-text-field
             v-model="email"
+            label="Email"
+            type="email"
             name="email"
-            :rules="emailRules"
-            v-slot="{ field, errors }"
-          >
-            <v-text-field
-              v-bind="field"
-              label="Email"
-              type="email"
-              name="email"
-              autocomplete="email"
-              :error-messages="errors"
-              required
-            ></v-text-field>
-          </Field>
+            autocomplete="email"
+            :error-messages="emailErrors"
+            required
+          ></v-text-field>
 
-          <Field
+          <v-text-field
             v-model="password"
+            :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
+            label="Password"
+            :type="showPass ? 'text' : 'password'"
             name="password"
-            :rules="passwordRules"
-            v-slot="{ field, errors }"
-          >
-            <v-text-field
-              v-bind="field"
-              :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
-              label="Password"
-              :type="showPass ? 'text' : 'password'"
-              name="password"
-              :error-messages="errors"
-              required
-              @click:append="showPass = !showPass"
-            ></v-text-field>
-          </Field>
+            :error-messages="passwordErrors"
+            required
+            @click:append="showPass = !showPass"
+          ></v-text-field>
 
-          <Field
+          <v-text-field
             v-model="passwordConfirm"
+            :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
+            label="Confirm Password"
+            :type="showPass ? 'text' : 'password'"
             name="confirm-password"
-            :rules="passwordConfirmRules"
-            v-slot="{ field, errors }"
-          >
-            <v-text-field
-              v-bind="field"
-              :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
-              label="Confirm Password"
-              :type="showPass ? 'text' : 'password'"
-              name="confirm-password"
-              :error-messages="errors"
-              required
-              @click:append="showPass = !showPass"
-            ></v-text-field>
-          </Field>
+            :error-messages="passwordConfirmErrors"
+            required
+            @click:append="showPass = !showPass"
+          ></v-text-field>
 
           <v-btn
             color="info"
             type="submit"
-            :disabled="!meta.valid"
+            :disabled="!form.meta.valid"
           >
             Reset Password
           </v-btn>
           <FlashMessage :message="message" :error="error" />
-        </Form>
+        </v-form>
     </v-card>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { Form, Field } from 'vee-validate';
+import { useField, useForm } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 import { useRoute } from 'vue-router';
 
@@ -94,14 +69,20 @@ const mdiIcons = {
   mdiEyeOff
 };
 
-const email: Ref<string | null> = ref(null);
-const password: Ref<string | null> = ref(null);
-const passwordConfirm: Ref<string | null> = ref(null);
 const showPass = ref(false);
 
-const emailRules = 'required|email';
-const passwordRules = 'required';
-const passwordConfirmRules = 'required|confirmed:@password';
+const form = reactive(useForm());
+
+const { value: email, errors: emailErrors } = useField('email', 'required|email', {
+  initialValue: ''
+});
+const { value: password, errors: passwordErrors } = useField('password', 'required', {
+  initialValue: ''
+});
+const { value: passwordConfirm, errors: passwordConfirmErrors } = useField('confirm-password', 'required|confirmed:@password', {
+  initialValue: ''
+});
+
 const error = ref(null);
 const message: Ref<string | null> = ref(null);
 

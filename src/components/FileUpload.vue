@@ -1,53 +1,42 @@
 <template>
   <v-card>
-      <Form
-        as="v-form"
-        ref="form"
-        lazy-validation
-        @submit="uploadFile"
-        v-slot="{ meta }"
+      <v-form
+        @submit.prevent="uploadFile"
       >
-        <Field
+        <v-file-input
+          id="file"
           name="file"
           ref="input"
-          rules="required|image"
-          @update:modelValue="fileChange"
-          v-slot="{ handleChange, handleBlur, errors }"
-        >
-          <v-file-input
-            :error-messages="errors"
-            :accept="fileTypes"
-            @change="handleChange"
-            @blur="handleBlur"
-            :on-click:clear="handleChange"
-            mode="aggressive"
-            id="file"
-            :prependIcon="icon"
-            :label="label"
-          ></v-file-input>
-        </Field>
+          :label="label"
+          :accept="fileTypes"
+          @change="handleChange"
+          @blur="handleBlur"
+          @update="fileChange"
+          :on-click:clear="handleChange"
+          mode="aggressive"
+          :prependIcon="icon"
+          :error-messages="fileErrors"
+        ></v-file-input>
         <v-btn
           color="info"
           type="submit"
-          :disabled="!file || !meta.valid"
+          :disabled="!file || !form.meta.valid"
           small
         >
           Upload
         </v-btn>
         <FlashMessage :message="message" :error="error" />
-      </Form>
+      </v-form>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import FileService from '@/services/FileService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { Field, Form } from 'vee-validate';
-
-// setInteractionMode('eager');
+import { useField, useForm } from 'vee-validate';
 
 interface Props {
   fileTypes?: Array<string>,
@@ -66,7 +55,11 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const emit = defineEmits<Emits>();
 
-const file: Ref<Blob | null> = ref(null);
+const form = reactive(useForm());
+
+const { value: file, errors: fileErrors, handleChange, handleBlur } = useField<Blob | null>('file', 'required|image', {
+  initialValue: null
+});
 
 const message: Ref<string | null> = ref(null);
 const error: Ref<Error | string | string[] | null> = ref(null);

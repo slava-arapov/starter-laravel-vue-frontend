@@ -1,44 +1,27 @@
 <template>
   <div>
-      <Form
-        as="v-form"
-        ref="form"
-        lazy-validation
-        @submit="login"
-        v-slot="{ meta }"
+      <v-form
+        ref="formElement"
+        @submit.prevent="login"
       >
-        <Field
+        <v-text-field
           v-model="email"
+          label="Email"
+          type="email"
           name="email"
-          :rules="emailRules"
-          v-slot="{ field, errors }"
-        >
-          <v-text-field
-            v-bind="field"
-            label="Email"
-            type="email"
-            name="email"
-            autocomplete="email"
-            :error-messages="errors"
-            required
-          ></v-text-field>
-        </Field>
+          autocomplete="email"
+          :error-messages="emailErrors"
+          required
+        ></v-text-field>
 
-        <Field
+        <v-text-field
           v-model="password"
+          label="Password"
+          type="password"
           name="password"
-          :rules="passwordRules"
-          v-slot="{ field, errors }"
-        >
-          <v-text-field
-            v-bind="field"
-            label="Password"
-            type="password"
-            name="password"
-            :error-messages="errors"
-            required
-          ></v-text-field>
-        </Field>
+          :error-messages="passwordErrors"
+          required
+        ></v-text-field>
 
         <div class="d-flex justify-between align-center pt-2">
           <router-link to="/forgot-password" class="text-sm base-link pr-3">
@@ -47,39 +30,42 @@
           <v-btn
             color="info"
             type="submit"
-            :disabled="!meta.valid"
+            :disabled="!form.meta.valid"
           >
             Login
           </v-btn>
         </div>
 
         <FlashMessage :error="error" />
-      </Form>
+      </v-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import type { Ref } from 'vue';
 import { getError } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
-import { Field, Form } from 'vee-validate';
+import { useField, useForm } from 'vee-validate';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 const store = useStore();
 const router = useRouter();
 
-const email = ref('');
-const password = ref('');
+const form = reactive(useForm());
 
-const emailRules = 'required|email';
-const passwordRules = 'required';
+const { value: email, errors: emailErrors } = useField('email', 'required|email', {
+  initialValue: ''
+});
+const { value: password, errors: passwordErrors } = useField('password', 'required', {
+  initialValue: ''
+});
 
 const error: Ref<Error | string | string[] | null> = ref(null);
 
-const form: Ref<HTMLFormElement | null> = ref(null);
+const formElement: Ref<HTMLFormElement | null> = ref(null);
 
 async function login(): Promise<void> {
   const payload = {
@@ -104,8 +90,8 @@ async function login(): Promise<void> {
   } catch (e) {
     console.log(e);
 
-    if (e.response.data && e.response.data.errors && form.value !== null) {
-      form.value.setErrors(e.response.data.errors);
+    if (e.response.data && e.response.data.errors && formElement.value !== null) {
+      formElement.value.setErrors(e.response.data.errors);
     } else {
       error.value = getError(e);
     }
