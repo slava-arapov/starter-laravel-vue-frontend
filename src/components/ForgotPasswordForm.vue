@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-form
-      ref="formElement"
       @submit.prevent="forgotPassword"
     >
         <v-text-field
@@ -47,8 +46,6 @@ const { value: email, errors: emailErrors } = useField('email', 'required|email'
 const error: Ref<Error | string | string[] | null> = ref(null);
 const message: Ref<string | null> = ref(null);
 
-const formElement: Ref<HTMLFormElement | null> = ref(null);
-
 async function forgotPassword(): Promise<void> {
   error.value = null;
   message.value = null;
@@ -62,8 +59,8 @@ async function forgotPassword(): Promise<void> {
   } catch (e) {
     console.log(e);
 
-    if (e.response.data.errors && formElement.value !== null) {
-      formElement.value.setErrors(e.response.data.errors);
+    if (e.response.data.errors) {
+      form.setErrors(e.response.data.errors);
     } else {
       error.value = getError(e);
     }

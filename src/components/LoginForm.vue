@@ -1,7 +1,6 @@
 <template>
   <div>
       <v-form
-        ref="formElement"
         @submit.prevent="login"
       >
         <v-text-field
@@ -65,8 +64,6 @@ const { value: password, errors: passwordErrors } = useField('password', 'requir
 
 const error: Ref<Error | string | string[] | null> = ref(null);
 
-const formElement: Ref<HTMLFormElement | null> = ref(null);
-
 async function login(): Promise<void> {
   const payload = {
     email: email.value,
@@ -90,8 +87,8 @@ async function login(): Promise<void> {
   } catch (e) {
     console.log(e);
 
-    if (e.response.data && e.response.data.errors && formElement.value !== null) {
-      formElement.value.setErrors(e.response.data.errors);
+    if (e.response.data && e.response.data.errors) {
+      form.setErrors(e.response.data.errors);
     } else {
       error.value = getError(e);
     }
