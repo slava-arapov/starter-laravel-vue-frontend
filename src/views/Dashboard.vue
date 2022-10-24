@@ -9,7 +9,7 @@
           <v-card-title
             class="text-h5"
           >
-            {{ authUser.name }}
+            {{ authUser?.name }}
           </v-card-title>
           <v-card-subtitle>signed in</v-card-subtitle>
 
@@ -32,7 +32,7 @@
         >
           <v-img
             :alt="authUser.name + ' avatar'"
-            v-if="authUser.avatar"
+            v-if="authUser?.avatar"
             :src="apiUrl+authUser.avatar"
             aspect-ratio="1"
             class="shrink grey lighten-2 rounded-circle "

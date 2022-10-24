@@ -60,14 +60,14 @@
             v-bind="props"
           >
             <v-img
-              :alt="authUser.name + ' avatar'"
-              v-if="authUser.avatar"
-              :src="apiUrl+authUser.avatar"
+              :alt="authUser?.name + ' avatar'"
+              v-if="authUser?.avatar"
+              :src="apiUrl+authUser?.avatar"
               aspect-ratio="1"
               class="shrink mr-2 hidden-sm-and-down grey lighten-2 rounded-circle"
               min-width="30"
             />
-            {{ authUser.name }}
+            {{ authUser?.name }}
           </v-btn>
         </template>
 

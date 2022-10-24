@@ -9,9 +9,9 @@
           tile
         >
           <v-img
-            :alt="authUser.name + ' avatar'"
-            v-if="authUser.avatar"
-            :src="apiUrl+authUser.avatar"
+            :alt="authUser?.name + ' avatar'"
+            v-if="authUser?.avatar"
+            :src="apiUrl+authUser?.avatar"
             aspect-ratio="1"
             class="shrink grey lighten-2 rounded-circle"
             max-height="36"
@@ -24,21 +24,21 @@
           ></v-icon>
         </v-avatar>
       <p class="ma-0">
-        {{ authUser.name }}
+        {{ authUser?.name }}
       </p>
     </v-card-title>
     <v-card-subtitle class="d-flex align-center">
       <v-icon
-        v-if="authUser.email_verified_at"
+        v-if="authUser?.email_verified_at"
         :icon="mdiIcons.mdiCheckDecagram"
         class="success--text pr-1"
         title="Verified Email"
       ></v-icon>
-      {{ authUser.email }}
+      {{ authUser?.email }}
     </v-card-subtitle>
 
     <v-card-actions>
-      <VerifyEmail v-if="!authUser.email_verified_at"/>
+      <VerifyEmail v-if="!authUser?.email_verified_at"/>
     </v-card-actions>
   </v-card>
 </template>
