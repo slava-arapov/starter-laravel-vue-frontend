@@ -11,20 +11,23 @@
       >
         {{ error }}
       </p>
-      <ul
+      <div
         v-if="getType(error) === 'object'"
-        class="mt-2 text-sm text-red-500"
-        key="error-list"
+        class="mt-4"
       >
-        <li v-for="key in errorKeys" :key="key">
-          <b class="font-bold capitalize">{{ titleCase(key) }}</b>
-          <ul class="ml-2">
-            <li v-for="(item, index) in getErrors(key)" :key="`${index}-error`">
-              {{ item }}
-            </li>
-          </ul>
-        </li>
-      </ul>
+        <v-alert
+          v-for="key in errorKeys"
+          :key="key"
+          type="error"
+          variant="outlined"
+          density="compact"
+        >
+          <strong>{{ capitalize(key) }}</strong>
+          <div v-for="(item, index) in getErrors(key)" :key="`${index}-error`">
+            {{ item }}
+          </div>
+        </v-alert>
+      </div>
     </transition-group>
   </div>
 </template>
@@ -64,8 +67,8 @@ const errorKeys = computed(() => {
   return Object.keys(props.error);
 });
 
-function titleCase(value: string) {
-  return value.replace('_', ' ');
+function capitalize(value: string) {
+  return value.replace('_', ' ').split(' ').map(value => value[0].toUpperCase() + value.substr(1)).join(' ');
 }
 
 </script>
