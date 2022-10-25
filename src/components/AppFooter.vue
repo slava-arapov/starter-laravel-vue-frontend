@@ -15,19 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useStore } from 'vuex';
 import ThemeControl from '@/components/ThemeControl.vue';
-
-const store = useStore();
-
-const authUser = computed(() => store.getters['auth/authUser']);
-const isAdmin = computed(() => store.getters['auth/isAdmin']);
-
-const apiUrl = import.meta.env.VITE_APP_API_URL;
-
-function logout() {
-  store.dispatch('auth/logout');
-}
 
 </script>
