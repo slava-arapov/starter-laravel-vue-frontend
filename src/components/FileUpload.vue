@@ -33,7 +33,8 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import type { Ref } from 'vue';
-import { getError } from '@/utils/helpers';
+import { getErrorDictionary } from '@/utils/helpers';
+import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import FileService from '@/services/FileService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
@@ -62,7 +63,7 @@ const { value: file, errors: fileErrors, handleChange, handleBlur } = useField<B
 });
 
 const message: Ref<string | null> = ref(null);
-const error: Ref<Error | string | string[] | null> = ref(null);
+const error: Ref<ErrorDictionary | null> = ref(null);
 
 const input: Ref<HTMLFormElement | null> = ref(null);
 
@@ -97,7 +98,7 @@ function uploadFile() {
       message.value = 'File uploaded.';
       emit('fileUploaded');
     })
-    .catch((e) => (error.value = getError(e)));
+    .catch((e) => (error.value = getErrorDictionary(e)));
 }
 
 </script>

@@ -19,13 +19,14 @@
 import { computed, ref } from 'vue';
 import type { Ref } from 'vue';
 import { useStore } from 'vuex';
-import { getError } from '@/utils/helpers';
+import { getErrorDictionary } from '@/utils/helpers';
+import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 
 const store = useStore();
 
-const error: Ref<Error | string | string[] | null> = ref(null);
+const error: Ref<ErrorDictionary | null> = ref(null);
 const message: Ref<string | null> = ref(null);
 
 const authUser = computed(() => store.getters['auth/authUser']);
@@ -38,7 +39,7 @@ function sendVerification() {
   };
   AuthService.sendVerification(payload)
     .then(() => (message.value = 'Verification email sent.'))
-    .catch((e) => (error.value = getError(e)));
+    .catch((e) => (error.value = getErrorDictionary(e)));
 }
 
 </script>

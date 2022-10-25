@@ -43,7 +43,8 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import type { Ref } from 'vue';
-import { getError } from '@/utils/helpers';
+import { getErrorDictionary } from '@/utils/helpers';
+import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
@@ -62,7 +63,7 @@ const { value: password, errors: passwordErrors } = useField('password', 'requir
   initialValue: ''
 });
 
-const error: Ref<Error | string | string[] | null> = ref(null);
+const error: Ref<ErrorDictionary | null> = ref(null);
 
 async function login(): Promise<void> {
   const payload = {
@@ -78,11 +79,11 @@ async function login(): Promise<void> {
       await router.push('/dashboard');
     } else {
       const fetchError = Error(
-        'Unable to fetch user after login, check your API settings.'
+        'Unable to fetch user after login, check your API settings'
       );
-      fetchError.name = 'Fetch User';
+      fetchError.name = 'User fetch error';
       console.log(fetchError);
-      error.value = getError(fetchError);
+      error.value = getErrorDictionary(fetchError);
     }
   } catch (e) {
     console.log(e);
@@ -90,7 +91,7 @@ async function login(): Promise<void> {
     if (e.response.data && e.response.data.errors) {
       form.setErrors(e.response.data.errors);
     } else {
-      error.value = getError(e);
+      error.value = getErrorDictionary(e);
     }
   }
 }

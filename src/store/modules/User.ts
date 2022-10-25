@@ -1,4 +1,4 @@
-import { getError } from '@/utils/helpers';
+import { getErrorDictionary } from '@/utils/helpers';
 import { User } from '@/interfaces/User';
 import { Users } from '@/interfaces/Users';
 import { Meta } from '@/interfaces/Meta';
@@ -59,7 +59,7 @@ export const actions = {
       })
       .catch((error) => {
         commit('SET_LOADING', false);
-        commit('SET_ERROR', getError(error));
+        commit('SET_ERROR', getErrorDictionary(error));
       });
   },
   paginateUsers({ commit }: { commit: Commit }, link: string): void {
@@ -70,7 +70,7 @@ export const actions = {
       })
       .catch((error) => {
         commit('SET_LOADING', false);
-        commit('SET_ERROR', getError(error));
+        commit('SET_ERROR', getErrorDictionary(error));
       });
   }
 };

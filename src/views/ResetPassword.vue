@@ -55,7 +55,8 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import type { Ref } from 'vue';
-import { getError } from '@/utils/helpers';
+import { getErrorDictionary } from '@/utils/helpers';
+import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
@@ -83,7 +84,7 @@ const { value: passwordConfirm, errors: passwordConfirmErrors } = useField('conf
   initialValue: ''
 });
 
-const error = ref(null);
+const error: Ref<ErrorDictionary | null> = ref(null);
 const message: Ref<string | null> = ref(null);
 
 function resetPassword() {
@@ -97,6 +98,6 @@ function resetPassword() {
   };
   AuthService.resetPassword(payload)
     .then(() => (message.value = 'Password reset.'))
-    .catch((error) => (error.value = getError(error)));
+    .catch((e) => (error.value = getErrorDictionary(e)));
 }
 </script>

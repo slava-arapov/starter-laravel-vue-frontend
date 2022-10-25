@@ -58,7 +58,8 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import type { Ref } from 'vue';
-import { getError } from '@/utils/helpers';
+import { getErrorDictionary } from '@/utils/helpers';
+import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useForm, useField } from 'vee-validate';
@@ -89,7 +90,7 @@ const { value: confirmPassword, errors: confirmPasswordErrors } = useField('conf
   initialValue: ''
 });
 
-const error: Ref<Error | string | string[] | null> = ref(null);
+const error: Ref<ErrorDictionary | null> = ref(null);
 
 function registerUser() {
   error.value = null;
@@ -101,7 +102,7 @@ function registerUser() {
   };
   AuthService.registerUser(payload)
     .then(() => router.push('/dashboard'))
-    .catch((e) => (error.value = getError(e)));
+    .catch((e) => (error.value = getErrorDictionary(e)));
 }
 
 </script>

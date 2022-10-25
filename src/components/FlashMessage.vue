@@ -31,10 +31,16 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+// Currently type imports from other files are not supported: https://vuejs.org/api/sfc-script-setup.html#typescript-only-features
+// import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
+
+interface ErrorDictionary {
+  [index: string]: string[];
+}
 
 interface Props {
   message?: string | null,
-  error?: object | string | string[] | Error | null
+  error?: ErrorDictionary | string /* | string[] | Error */ | null
 }
 
 const props = defineProps<Props>();
@@ -46,7 +52,7 @@ function getType(obj: any) {
 
 function getErrors (key: string | number) {
   if (props.error && getType(props.error) === 'object') {
-    return (props.error as Record<string | number, string>)[key];
+    return (props.error as ErrorDictionary)[key];
   }
   return null;
 }

@@ -39,7 +39,8 @@
 import { computed, onMounted, reactive, ref } from 'vue';
 import type { Ref } from 'vue';
 import { useStore } from 'vuex';
-import { getError } from '@/utils/helpers';
+import { getErrorDictionary } from '@/utils/helpers';
+import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
@@ -55,7 +56,7 @@ const { value: email, errors: emailErrors } = useField('email', 'required|email'
   initialValue: ''
 });
 
-const error: Ref<Error | string | string[] | null> = ref(null);
+const error: Ref<ErrorDictionary | null> = ref(null);
 const message: Ref<string | null> = ref(null);
 
 const authUser = computed(() => store.getters['auth/authUser']);
@@ -72,7 +73,7 @@ function updateUser() {
   AuthService.updateUser(payload)
     .then(() => store.dispatch('auth/getAuthUser'))
     .then(() => (message.value = 'User updated.'))
-    .catch((error) => (error.value = getError(error)));
+    .catch((e) => (error.value = getErrorDictionary(e)));
 }
 
 onMounted(() => {

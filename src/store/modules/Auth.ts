@@ -1,5 +1,5 @@
 import router from '@/router';
-import { getError } from '@/utils/helpers';
+import { getErrorDictionary } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import { Commit } from 'vuex';
 import { AxiosResponse } from 'axios';
@@ -57,7 +57,7 @@ export const actions = {
         }
       })
       .catch((error: string) => {
-        commit('SET_ERROR', getError(error));
+        commit('SET_ERROR', getErrorDictionary(new Error(error)));
       });
   },
   async getAuthUser ({ commit }: { commit: Commit }): Promise<{'id': number | null, 'name': string | null, 'email': string | null, 'avatar': string | null, 'isAdmin': boolean, 'email_verified_at': string | null} | undefined | null> {
@@ -74,7 +74,7 @@ export const actions = {
     } catch (error) {
       commit('SET_LOADING', false);
       commit('SET_USER', null);
-      commit('SET_ERROR', getError(error));
+      commit('SET_ERROR', getErrorDictionary(error));
     }
   },
   setGuest({ commit }: { commit: Commit }, { value }: { value: string }): void {
