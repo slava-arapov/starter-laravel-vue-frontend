@@ -1,6 +1,7 @@
 <template>
   <v-card
     elevation="2"
+    width="20rem"
   >
     <v-card-title>Login</v-card-title>
 
