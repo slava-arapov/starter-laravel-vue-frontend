@@ -3,26 +3,26 @@
     <v-card-title
       class="text-h5 d-flex align-center mb-2"
     >
-        <v-avatar
+      <v-avatar
+        size="36"
+        class="mr-3"
+        tile
+      >
+        <v-img
+          v-if="authUser?.avatar"
+          :alt="authUser?.name + ' avatar'"
+          :src="apiUrl+authUser?.avatar"
+          aspect-ratio="1"
+          class="shrink grey lighten-2 rounded-circle"
+          max-height="36"
+          max-width="36"
+        />
+        <v-icon
+          v-else
+          :icon="mdiIcons.mdiAccountCircle"
           size="36"
-          class="mr-3"
-          tile
-        >
-          <v-img
-            :alt="authUser?.name + ' avatar'"
-            v-if="authUser?.avatar"
-            :src="apiUrl+authUser?.avatar"
-            aspect-ratio="1"
-            class="shrink grey lighten-2 rounded-circle"
-            max-height="36"
-            max-width="36"
-          />
-          <v-icon
-            v-else
-            :icon="mdiIcons.mdiAccountCircle"
-            size="36"
-          ></v-icon>
-        </v-avatar>
+        />
+      </v-avatar>
       <p class="ma-0">
         {{ authUser?.name }}
       </p>
@@ -33,12 +33,12 @@
         :icon="mdiIcons.mdiCheckDecagram"
         class="success--text pr-1"
         title="Verified Email"
-      ></v-icon>
+      />
       {{ authUser?.email }}
     </v-card-subtitle>
 
     <v-card-actions>
-      <VerifyEmail v-if="!authUser?.email_verified_at"/>
+      <VerifyEmail v-if="!authUser?.email_verified_at" />
     </v-card-actions>
   </v-card>
 </template>

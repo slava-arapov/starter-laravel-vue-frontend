@@ -3,28 +3,30 @@
     <v-form
       @submit.prevent="forgotPassword"
     >
-        <v-text-field
-          v-model="email"
-          label="Email"
-          type="email"
-          name="email"
-          autocomplete="email"
-          :error-messages="emailErrors"
-          required
-        ></v-text-field>
+      <v-text-field
+        v-model="email"
+        label="Email"
+        type="email"
+        name="email"
+        autocomplete="email"
+        :error-messages="emailErrors"
+        required
+      />
 
-        <div class="d-flex flex-row-reverse">
-          <v-btn
-            color="info"
-            type="submit"
-            :disabled="!form.meta.valid"
-          >
-            Send
-          </v-btn>
+      <div class="d-flex flex-row-reverse">
+        <v-btn
+          color="info"
+          type="submit"
+          :disabled="!form.meta.valid"
+        >
+          Send
+        </v-btn>
+      </div>
 
-        </div>
-
-        <FlashMessage :message="message" :error="error" />
+      <FlashMessage
+        :message="message"
+        :error="error"
+      />
     </v-form>
   </div>
 </template>

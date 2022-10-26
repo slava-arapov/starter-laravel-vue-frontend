@@ -1,13 +1,16 @@
 <template>
   <div class="p-5">
-    <transition name="fade" mode="out-in">
+    <transition
+      name="fade"
+      mode="out-in"
+    >
       <FlashMessage
-        message="loading..."
         v-if="loading && (!users || !users.length)"
         key="loading"
+        message="loading..."
       />
       <v-table v-else>
-          <thead>
+        <thead>
           <tr>
             <th class="text-left">
               User
@@ -16,56 +19,60 @@
               Email
             </th>
           </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="user in users"
-              :key="user.id"
-            >
-              <td>
-                <v-avatar
-                  class="ma-3 d-sm-and-up-none"
-                  size="32"
-                  tile
-                >
-                  <v-img
-                    :alt="user.name + ' avatar'"
-                    v-if="user.avatar"
-                    :src="apiUrl+user.avatar"
-                    aspect-ratio="1"
-                    class="shrink grey lighten-2 rounded-circle"
-                    max-height="32"
-                    max-width="32"
-                  />
-                  <v-icon
-                    v-else
-                    :icon="mdiIcons.mdiAccountCircle"
-                    size="32"
-                  ></v-icon>
-                </v-avatar> {{ user.name }}
-              </td>
-              <td>
+        </thead>
+        <tbody>
+          <tr
+            v-for="user in users"
+            :key="user.id"
+          >
+            <td>
+              <v-avatar
+                class="ma-3 d-sm-and-up-none"
+                size="32"
+                tile
+              >
+                <v-img
+                  v-if="user.avatar"
+                  :alt="user.name + ' avatar'"
+                  :src="apiUrl+user.avatar"
+                  aspect-ratio="1"
+                  class="shrink grey lighten-2 rounded-circle"
+                  max-height="32"
+                  max-width="32"
+                />
                 <v-icon
-                  :icon="mdiIcons.mdiEmail"
-                  :color="user.email_verified_at ? 'teal darken-2' : 'secondary'"
-                ></v-icon>
-                {{ user.email }}
-              </td>
-            </tr>
-          </tbody>
+                  v-else
+                  :icon="mdiIcons.mdiAccountCircle"
+                  size="32"
+                />
+              </v-avatar> {{ user.name }}
+            </td>
+            <td>
+              <v-icon
+                :icon="mdiIcons.mdiEmail"
+                :color="user.email_verified_at ? 'teal darken-2' : 'secondary'"
+              />
+              {{ user.email }}
+            </td>
+          </tr>
+        </tbody>
       </v-table>
     </transition>
     <transition name="fade">
-      <FlashMessage :error="error" v-if="error" key="error" />
+      <FlashMessage
+        v-if="error"
+        key="error"
+        :error="error"
+      />
     </transition>
     <transition name="fade">
       <BasePagination
-        path="users"
+        v-if="meta && meta.last_page > 1"
         v-model="meta.current_page"
+        path="users"
         :links="links"
         :meta="meta"
         action="user/paginateUsers"
-        v-if="meta && meta.last_page > 1"
       />
     </transition>
   </div>

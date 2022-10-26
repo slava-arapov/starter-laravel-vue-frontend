@@ -2,9 +2,9 @@
   <div>
     <v-btn-toggle
       v-model="themeToggle"
-      @update:modelValue="themeToggleChange"
       mandatory
       rounded
+      @update:modelValue="themeToggleChange"
     >
       <v-btn
         title="Dark Theme"
@@ -14,7 +14,7 @@
         <v-icon
           :icon="mdiIcons.mdiWeatherNight"
           small
-        ></v-icon>
+        />
       </v-btn>
       <v-btn
         title="System Theme"
@@ -24,7 +24,7 @@
         <v-icon
           :icon="mdiIcons.mdiThemeLightDark"
           small
-        ></v-icon>
+        />
       </v-btn>
       <v-btn
         title="Light Theme"
@@ -34,10 +34,9 @@
         <v-icon
           :icon="mdiIcons.mdiWhiteBalanceSunny"
           small
-        ></v-icon>
+        />
       </v-btn>
     </v-btn-toggle>
-
   </div>
 </template>
 

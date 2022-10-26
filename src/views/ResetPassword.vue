@@ -1,55 +1,58 @@
 <template>
-    <v-card
-      elevation="2"
-      width="20rem"
+  <v-card
+    elevation="2"
+    width="20rem"
+  >
+    <v-card-title>Reset Password</v-card-title>
+    <v-form
+      class="px-5 pb-5"
+      @submit.prevent="resetPassword"
     >
-      <v-card-title>Reset Password</v-card-title>
-        <v-form
-          class="px-5 pb-5"
-          @submit.prevent="resetPassword"
-        >
-          <v-text-field
-            v-model="email"
-            label="Email"
-            type="email"
-            name="email"
-            autocomplete="email"
-            :error-messages="emailErrors"
-            required
-          ></v-text-field>
+      <v-text-field
+        v-model="email"
+        label="Email"
+        type="email"
+        name="email"
+        autocomplete="email"
+        :error-messages="emailErrors"
+        required
+      />
 
-          <v-text-field
-            v-model="password"
-            :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
-            label="Password"
-            :type="showPass ? 'text' : 'password'"
-            name="password"
-            :error-messages="passwordErrors"
-            required
-            @click:append="showPass = !showPass"
-          ></v-text-field>
+      <v-text-field
+        v-model="password"
+        :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
+        label="Password"
+        :type="showPass ? 'text' : 'password'"
+        name="password"
+        :error-messages="passwordErrors"
+        required
+        @click:append="showPass = !showPass"
+      />
 
-          <v-text-field
-            v-model="passwordConfirm"
-            :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
-            label="Confirm Password"
-            :type="showPass ? 'text' : 'password'"
-            name="confirm-password"
-            :error-messages="passwordConfirmErrors"
-            required
-            @click:append="showPass = !showPass"
-          ></v-text-field>
+      <v-text-field
+        v-model="passwordConfirm"
+        :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
+        label="Confirm Password"
+        :type="showPass ? 'text' : 'password'"
+        name="confirm-password"
+        :error-messages="passwordConfirmErrors"
+        required
+        @click:append="showPass = !showPass"
+      />
 
-          <v-btn
-            color="info"
-            type="submit"
-            :disabled="!form.meta.valid"
-          >
-            Reset Password
-          </v-btn>
-          <FlashMessage :message="message" :error="error" />
-        </v-form>
-    </v-card>
+      <v-btn
+        color="info"
+        type="submit"
+        :disabled="!form.meta.valid"
+      >
+        Reset Password
+      </v-btn>
+      <FlashMessage
+        :message="message"
+        :error="error"
+      />
+    </v-form>
+  </v-card>
 </template>
 
 <script setup lang="ts">

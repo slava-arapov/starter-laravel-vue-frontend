@@ -11,7 +11,11 @@
         Verify Email
       </v-btn>
     </form>
-    <FlashMessage :message="message" :error="error" class="ml-2"/>
+    <FlashMessage
+      :message="message"
+      :error="error"
+      class="ml-2"
+    />
   </div>
 </template>
 

@@ -1,5 +1,8 @@
 <template>
-  <div aria-label="Pagination" v-if="meta !== null">
+  <div
+    v-if="meta !== null"
+    aria-label="Pagination"
+  >
     <p class="text-sm text-gray-500">
       Page {{ meta.current_page }} of {{ meta.last_page }}
     </p>
@@ -7,7 +10,7 @@
       <v-pagination
         v-model="currentPage"
         :length="meta.last_page"
-      ></v-pagination>
+      />
     </div>
   </div>
 </template>

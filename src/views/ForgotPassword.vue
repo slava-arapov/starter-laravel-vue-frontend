@@ -7,9 +7,7 @@
       <v-card-title>Forgot Password</v-card-title>
 
       <ForgotPasswordForm class="px-5 pb-5" />
-
     </v-card>
-
   </div>
 </template>
 

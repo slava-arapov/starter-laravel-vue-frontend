@@ -1,32 +1,35 @@
 <template>
   <v-card>
-      <v-form
-        @submit.prevent="uploadFile"
+    <v-form
+      @submit.prevent="uploadFile"
+    >
+      <v-file-input
+        id="file"
+        ref="input"
+        name="file"
+        :label="label"
+        :accept="fileTypes"
+        :on-click:clear="handleChange"
+        mode="aggressive"
+        :prepend-icon="icon"
+        :error-messages="fileErrors"
+        @change="handleChange"
+        @blur="handleBlur"
+        @update="fileChange"
+      />
+      <v-btn
+        color="info"
+        type="submit"
+        :disabled="!file || !form.meta.valid"
+        small
       >
-        <v-file-input
-          id="file"
-          name="file"
-          ref="input"
-          :label="label"
-          :accept="fileTypes"
-          @change="handleChange"
-          @blur="handleBlur"
-          @update="fileChange"
-          :on-click:clear="handleChange"
-          mode="aggressive"
-          :prependIcon="icon"
-          :error-messages="fileErrors"
-        ></v-file-input>
-        <v-btn
-          color="info"
-          type="submit"
-          :disabled="!file || !form.meta.valid"
-          small
-        >
-          Upload
-        </v-btn>
-        <FlashMessage :message="message" :error="error" />
-      </v-form>
+        Upload
+      </v-btn>
+      <FlashMessage
+        :message="message"
+        :error="error"
+      />
+    </v-form>
   </v-card>
 </template>
 
@@ -61,6 +64,7 @@ const form = reactive(useForm());
 const { value: file, errors: fileErrors, handleChange, handleBlur } = useField<Blob | null>('file', 'required|image', {
   initialValue: null
 });
+// some lints
 
 const message: Ref<string | null> = ref(null);
 const error: Ref<ErrorDictionary | null> = ref(null);

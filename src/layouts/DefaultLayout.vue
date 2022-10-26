@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <AppHeader/>
+    <AppHeader />
     <v-main>
-      <v-container fill-height class="d-flex justify-center">
+      <v-container>
         <slot />
       </v-container>
     </v-main>
-    <AppFooter/>
+    <AppFooter />
   </v-app>
 </template>
 

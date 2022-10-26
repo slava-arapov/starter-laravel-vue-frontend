@@ -27,7 +27,7 @@
         </router-link>
       </div>
 
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         v-if="authUser"
         to="/dashboard"
@@ -53,15 +53,15 @@
         bottom
         left
       >
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-btn
             dark
             elevation="0"
             v-bind="props"
           >
             <v-img
-              :alt="authUser?.name + ' avatar'"
               v-if="authUser?.avatar"
+              :alt="authUser?.name + ' avatar'"
               :src="apiUrl+authUser?.avatar"
               aspect-ratio="1"
               class="shrink mr-2 hidden-sm-and-down grey lighten-2 rounded-circle"

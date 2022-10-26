@@ -2,53 +2,56 @@
   <v-card
     class="ma-3"
   >
-      <v-form
-        @submit.prevent="updatePassword"
+    <v-form
+      @submit.prevent="updatePassword"
+    >
+      <v-text-field
+        v-model="currentPassword"
+        :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
+        label="Current Password"
+        :type="showPass ? 'text' : 'password'"
+        name="current-password"
+        :error-messages="currentPasswordErrors"
+        required
+        @click:append="showPass = !showPass"
+      />
+
+      <v-text-field
+        v-model="password"
+        :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
+        label="Password"
+        :type="showPass ? 'text' : 'password'"
+        name="password"
+        :error-messages="passwordErrors"
+        required
+        @click:append="showPass = !showPass"
+      />
+
+      <v-text-field
+        v-model="confirmPassword"
+        :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
+        label="Confirm Password"
+        :type="showPass ? 'text' : 'password'"
+        name="confirm-password"
+        :error-messages="confirmPasswordErrors"
+        required
+        @click:append="showPass = !showPass"
+      />
+
+      <v-btn
+        color="info"
+        type="submit"
+        :disabled="!form.meta.valid"
+        small
       >
-        <v-text-field
-          v-model="currentPassword"
-          :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
-          label="Current Password"
-          :type="showPass ? 'text' : 'password'"
-          name="current-password"
-          :error-messages="currentPasswordErrors"
-          required
-          @click:append="showPass = !showPass"
-        ></v-text-field>
+        Update
+      </v-btn>
 
-        <v-text-field
-          v-model="password"
-          :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
-          label="Password"
-          :type="showPass ? 'text' : 'password'"
-          name="password"
-          :error-messages="passwordErrors"
-          required
-          @click:append="showPass = !showPass"
-        ></v-text-field>
-
-        <v-text-field
-          v-model="confirmPassword"
-          :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
-          label="Confirm Password"
-          :type="showPass ? 'text' : 'password'"
-          name="confirm-password"
-          :error-messages="confirmPasswordErrors"
-          required
-          @click:append="showPass = !showPass"
-        ></v-text-field>
-
-        <v-btn
-          color="info"
-          type="submit"
-          :disabled="!form.meta.valid"
-          small
-        >
-          Update
-        </v-btn>
-
-        <FlashMessage :message="message" :error="error" />
-      </v-form>
+      <FlashMessage
+        :message="message"
+        :error="error"
+      />
+    </v-form>
   </v-card>
 </template>
 

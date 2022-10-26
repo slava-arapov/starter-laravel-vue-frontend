@@ -1,22 +1,42 @@
 <template>
   <v-row>
-    <v-col cols="12" sm="6" md="4" lg="3">
+    <v-col
+      cols="12"
+      sm="6"
+      md="4"
+      lg="3"
+    >
       <AuthUser class="ma-3 pa-5" />
     </v-col>
-    <v-col cols="12" sm="6" md="4" lg="3">
+    <v-col
+      cols="12"
+      sm="6"
+      md="4"
+      lg="3"
+    >
       <AuthUserForm class="ma-3 pa-5" />
     </v-col>
-    <v-col cols="12" sm="6" md="4" lg="3">
+    <v-col
+      cols="12"
+      sm="6"
+      md="4"
+      lg="3"
+    >
       <UpdatePassword class="ma-3 pa-5" />
     </v-col>
-    <v-col cols="12" sm="6" md="4" lg="3">
+    <v-col
+      cols="12"
+      sm="6"
+      md="4"
+      lg="3"
+    >
       <FileUpload
         label="Upload Avatar"
         :icon="mdiIcons.mdiCamera"
-        :fileTypes="['image/*']"
+        :file-types="['image/*']"
         endpoint="/users/auth/avatar"
-        @fileUploaded="updateUser"
         class="ma-3 pa-5"
+        @fileUploaded="updateUser"
       />
     </v-col>
   </v-row>

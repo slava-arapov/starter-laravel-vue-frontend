@@ -11,7 +11,7 @@
         autocomplete="name"
         :error-messages="nameErrors"
         required
-      ></v-text-field>
+      />
       <v-text-field
         v-model="email"
         label="Email"
@@ -20,7 +20,7 @@
         autocomplete="email"
         :error-messages="emailErrors"
         required
-      ></v-text-field>
+      />
       <v-text-field
         v-model="password"
         :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
@@ -30,7 +30,7 @@
         :error-messages="passwordErrors"
         required
         @click:append="showPass = !showPass"
-      ></v-text-field>
+      />
 
       <v-text-field
         v-model="confirmPassword"
@@ -41,16 +41,16 @@
         :error-messages="confirmPasswordErrors"
         required
         @click:append="showPass = !showPass"
-      ></v-text-field>
+      />
 
-        <v-btn
-          color="info"
-          type="submit"
-          :disabled="!form.meta.valid"
-        >
-          Register
-        </v-btn>
-        <FlashMessage :error="error" />
+      <v-btn
+        color="info"
+        type="submit"
+        :disabled="!form.meta.valid"
+      >
+        Register
+      </v-btn>
+      <FlashMessage :error="error" />
     </v-form>
   </div>
 </template>

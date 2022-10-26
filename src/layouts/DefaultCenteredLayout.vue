@@ -1,12 +1,15 @@
 <template>
   <v-app>
-    <AppHeader/>
+    <AppHeader />
     <v-main>
-      <v-container>
+      <v-container
+        fill-height
+        class="d-flex justify-center"
+      >
         <slot />
       </v-container>
     </v-main>
-    <AppFooter/>
+    <AppFooter />
   </v-app>
 </template>
 

@@ -1,7 +1,11 @@
 <template>
   <div>
     <transition-group name="fade">
-      <p v-if="message" class="ma-0 mt-2 text-sm success--text" key="message">
+      <p
+        v-if="message"
+        key="message"
+        class="ma-0 mt-2 text-sm success--text"
+      >
         {{ message }}
       </p>
       <p
@@ -23,7 +27,10 @@
           density="compact"
         >
           <strong>{{ capitalize(key) }}</strong>
-          <div v-for="(item, index) in getErrors(key)" :key="`${index}-error`">
+          <div
+            v-for="(item, index) in getErrors(key)"
+            :key="`${index}-error`"
+          >
             {{ item }}
           </div>
         </v-alert>

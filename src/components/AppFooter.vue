@@ -4,10 +4,18 @@
       <div class="d-flex flex-wrap align-center justify-space-around">
         <ThemeControl />
         <div>
-          Created by <a href="https://github.com/slava-arapov" class="base-link" target="_blank">@slava-arapov</a>
+          Created by <a
+            href="https://github.com/slava-arapov"
+            class="base-link"
+            target="_blank"
+          >@slava-arapov</a>
         </div>
         <div>
-          Based on <a href="https://laravelvuespa.com/" class="base-link" target="_blank">@garethredfern</a> template
+          Based on <a
+            href="https://laravelvuespa.com/"
+            class="base-link"
+            target="_blank"
+          >@garethredfern</a> template
         </div>
       </div>
     </v-container>

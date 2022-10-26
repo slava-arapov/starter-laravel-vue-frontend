@@ -11,7 +11,7 @@
         autocomplete="name"
         :error-messages="nameErrors"
         required
-      ></v-text-field>
+      />
 
       <v-text-field
         v-model="email"
@@ -21,7 +21,7 @@
         autocomplete="email"
         :error-messages="emailErrors"
         required
-      ></v-text-field>
+      />
       <v-btn
         color="info"
         type="submit"
@@ -30,7 +30,10 @@
       >
         Update
       </v-btn>
-      <FlashMessage :message="message" :error="error" />
+      <FlashMessage
+        :message="message"
+        :error="error"
+      />
     </v-form>
   </v-card>
 </template>
