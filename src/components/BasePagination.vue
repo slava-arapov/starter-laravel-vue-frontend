@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
 import { Meta } from '@/interfaces/Meta';
-import { useStore } from 'vuex';
+import { useStore } from '@/store';
 import { useRouter } from 'vue-router';
 import { Links } from '@/interfaces/Links';
 

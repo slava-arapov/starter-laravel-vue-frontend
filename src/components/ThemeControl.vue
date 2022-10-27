@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { mdiWeatherNight, mdiThemeLightDark, mdiWhiteBalanceSunny } from '@mdi/js';
-import { useStore } from 'vuex';
+import { useStore } from '@/store';
 
 const store = useStore();
 

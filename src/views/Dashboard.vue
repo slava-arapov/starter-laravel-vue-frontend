@@ -123,7 +123,7 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from 'vuex';
+import { useStore } from '@/store';
 import { computed } from 'vue';
 import type { Ref } from 'vue';
 import { mdiAccountCircle } from '@mdi/js';

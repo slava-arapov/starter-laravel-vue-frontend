@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
-import store from '@/store/index.ts';
+import { store } from '@/store/index.ts';
 import auth, { AuthInterface } from '@/middleware/auth';
 import admin, { AdminInterface } from '@/middleware/admin';
 import guest, { GuestInterface } from '@/middleware/guest';

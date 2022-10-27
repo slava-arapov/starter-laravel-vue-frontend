@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue';
 import type { Ref } from 'vue';
-import { useStore } from 'vuex';
+import { useStore } from '@/store';
 import { getErrorDictionary } from '@/utils/helpers';
 import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';

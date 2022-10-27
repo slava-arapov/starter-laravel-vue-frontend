@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from 'vuex';
+import { useStore } from '@/store';
 import FlashMessage from '@/components/FlashMessage.vue';
 import BasePagination from '@/components/BasePagination.vue';
 import { useRoute } from 'vue-router';

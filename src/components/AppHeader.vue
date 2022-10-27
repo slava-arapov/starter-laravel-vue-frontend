@@ -99,7 +99,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useStore } from 'vuex';
+import { useStore } from '@/store';
 import { mdiLogout } from '@mdi/js';
 
 const store = useStore();

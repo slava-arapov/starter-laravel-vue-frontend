@@ -13,7 +13,7 @@ import { localize, setLocale } from '@vee-validate/i18n';
 import ru from '@/locale/ru.json';
 import en from '@/locale/en.json';
 import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
+import { useStore } from '@/store';
 
 defineRule('email', email);
 defineRule('image', image);
@@ -49,7 +49,7 @@ function changeTheme (themeName: string) {
 }
 
 function refreshTheme() {
-  let themeName = store.state.settings.theme;
+  let themeName = store.state.settings.theme ?? '';
 
   if (themeName === 'system') {
     const systemThemeIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;

@@ -48,7 +48,7 @@ import FileUpload from '@/components/FileUpload.vue';
 import AuthUserForm from '@/components/AuthUserForm.vue';
 import UpdatePassword from '@/components/UpdatePassword.vue';
 import { mdiCamera } from '@mdi/js';
-import { useStore } from 'vuex';
+import { useStore } from '@/store';
 
 const store = useStore();
 

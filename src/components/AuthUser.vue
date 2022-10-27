@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { Ref } from 'vue';
-import { useStore } from 'vuex';
+import { useStore } from '@/store';
 import VerifyEmail from '@/components/VerifyEmail.vue';
 import { mdiAccountCircle, mdiCheckDecagram } from '@mdi/js';
 

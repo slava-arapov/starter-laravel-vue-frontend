@@ -51,7 +51,7 @@ import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
-import { useStore } from 'vuex';
+import { useStore } from '@/store';
 import { useRouter } from 'vue-router';
 
 const store = useStore();

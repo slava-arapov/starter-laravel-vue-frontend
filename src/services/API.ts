@@ -4,7 +4,7 @@
  */
 
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import store from '@/store';
+import { store } from '@/store';
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL + '/api',
