@@ -3,7 +3,6 @@ import { getErrorDictionary } from './helpers';
 import { AxiosError, AxiosResponse } from 'axios';
 
 describe('getErrorDictionary helper', () => {
-
   test('Error with message passed', () => {
     const error = new Error('Error message');
 
