@@ -7,7 +7,7 @@ export interface SettingsState {
 }
 
 export const state: SettingsState = {
-  theme: window.localStorage.getItem('theme')
+  theme: window.localStorage.getItem('theme') || 'system'
 };
 
 export const mutations = {

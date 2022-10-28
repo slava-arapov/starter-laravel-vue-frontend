@@ -53,7 +53,7 @@ const mdiIcons = {
   mdiWhiteBalanceSunny
 };
 
-const themeInitial = store.state.settings.theme || 'system';
+const themeInitial = store.state.settings.theme;
 
 const themeToggle = ref(themeInitial);
 
