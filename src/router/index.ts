@@ -1,10 +1,17 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
-import { store } from '@/store/index.ts';
-import auth, { AuthInterface } from '@/middleware/auth';
-import admin, { AdminInterface } from '@/middleware/admin';
-import guest, { GuestInterface } from '@/middleware/guest';
+import { store, StoreState } from '@/store/index.ts';
+import auth from '@/middleware/auth';
+import admin from '@/middleware/admin';
+import guest from '@/middleware/guest';
 import middlewarePipeline from '@/router/middlewarePipeline';
+import { Store } from 'vuex';
+
+export interface MiddlewareDataInterface {
+  to: RouteLocationNormalized,
+  next: NavigationGuardNext,
+  store: Store<StoreState>
+}
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,11 +37,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/users',
     name: 'users',
     meta: { middleware: [auth, admin] },
-    component: () => import('../views/Users.vue'),
-    beforeEnter: (to, from, next) => {
-      if (store.getters['auth/isAdmin']) next();
-      else next(false);
-    }
+    component: () => import('../views/Users.vue')
   },
   {
     path: '/login',
@@ -69,7 +72,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/About.vue')
   },
   {
-    path: '/:catchAll(.*)',
+    path: '/:pathMatch(.*)*',
     name: 'notFound',
     meta: { layout: 'default-centered' },
     component: () =>
@@ -95,14 +98,11 @@ router.beforeEach((to, from, next) => {
 
   store.commit('SET_ROUTE', to.matched[0].name);
 
-  if (!middleware) {
-    return next();
+  if (middleware) {
+    next = middlewarePipeline(context, middleware, 0);
   }
 
-  middleware[0]({
-    ...context,
-    next: middlewarePipeline(context, middleware, 1)
-  });
+  return next();
 });
 
 export default router;
@@ -110,6 +110,6 @@ export default router;
 declare module 'vue-router' {
   interface RouteMeta {
     layout?: string
-    middleware?: Array<(data: AdminInterface | GuestInterface | AuthInterface) => void>
+    middleware?: Array<(data: MiddlewareDataInterface) => void>
   }
 }
