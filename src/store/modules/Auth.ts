@@ -15,6 +15,15 @@ interface User {
   avatar: string
 }
 
+interface UserData {
+  id: number | null,
+  name: string | null,
+  email: string | null,
+  avatar: string | null,
+  isAdmin: boolean,
+  email_verified_at: string | null
+}
+
 export interface AuthState {
   user: User | null,
   guest: string | null,
@@ -60,10 +69,10 @@ export const actions = {
         commit('SET_ERROR', getErrorDictionary(new Error(error)));
       });
   },
-  async getAuthUser ({ commit }: { commit: Commit }): Promise<{'id': number | null, 'name': string | null, 'email': string | null, 'avatar': string | null, 'isAdmin': boolean, 'email_verified_at': string | null} | undefined | null> {
+  async getAuthUser ({ commit }: { commit: Commit }): Promise<UserData | undefined | null> {
     commit('SET_LOADING', true);
     try {
-      const response: AxiosResponse<{'data': {'id': number | null, 'name': string | null, 'email': string | null, 'avatar': string | null, 'isAdmin': boolean, 'email_verified_at': string | null}}> = await AuthService.getAuthUser();
+      const response: AxiosResponse<{ 'data': UserData }> = await AuthService.getAuthUser();
       if (response && response.data && response.data.data) {
         commit('SET_USER', response.data.data);
         commit('SET_LOADING', false);
