@@ -20,7 +20,6 @@ function setPaginatedUsers(commit: Commit, response: AxiosResponse<Users>) {
   commit('SET_USERS', response.data.data);
   commit('SET_META', response.data.meta);
   commit('SET_LINKS', response.data.links);
-  commit('SET_LOADING', false);
 }
 
 export const state: UserState = {
@@ -58,9 +57,9 @@ export const actions = {
         setPaginatedUsers(commit, response);
       })
       .catch((error) => {
-        commit('SET_LOADING', false);
         commit('SET_ERROR', getErrorDictionary(error));
       });
+    commit('SET_LOADING', false);
   },
   paginateUsers({ commit }: { commit: Commit }, link: string): void {
     commit('SET_LOADING', true);
@@ -69,9 +68,9 @@ export const actions = {
         setPaginatedUsers(commit, response);
       })
       .catch((error) => {
-        commit('SET_LOADING', false);
         commit('SET_ERROR', getErrorDictionary(error));
       });
+    commit('SET_LOADING', false);
   }
 };
 

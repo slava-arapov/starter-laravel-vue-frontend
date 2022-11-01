@@ -21,7 +21,7 @@ export const store = createStore<StoreState>({
     route: null
   } as StoreState,
   mutations: {
-    SET_ROUTE(state, route) {
+    SET_ROUTE(state, route: string | null) {
       state.route = route;
     }
   },

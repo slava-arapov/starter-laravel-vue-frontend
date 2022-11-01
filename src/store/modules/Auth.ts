@@ -75,16 +75,15 @@ export const actions = {
       const response: AxiosResponse<{ 'data': UserData }> = await AuthService.getAuthUser();
       if (response && response.data && response.data.data) {
         commit('SET_USER', response.data.data);
-        commit('SET_LOADING', false);
         return response.data.data;
       } else {
         return null;
       }
     } catch (error) {
-      commit('SET_LOADING', false);
       commit('SET_USER', null);
       commit('SET_ERROR', getErrorDictionary(error));
     }
+    commit('SET_LOADING', false);
   },
   setGuest({ commit }: { commit: Commit }, { value }: { value: string }): void {
     commit('SET_GUEST', value);
@@ -96,7 +95,7 @@ export const getters = {
     return state.user;
   },
   isAdmin: (state: AuthState): boolean => {
-    return state.user ? state.user.isAdmin === true : false;
+    return state.user?.isAdmin ?? false;
   },
   error: (state: AuthState): string | null => {
     return state.error;
