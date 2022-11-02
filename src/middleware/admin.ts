@@ -1,6 +1,6 @@
-import { MiddlewareDataInterface } from '@/router';
+import router, { MiddlewareDataInterface } from '@/router';
 
 export default function admin({ next, store }: MiddlewareDataInterface): void {
   if (store.getters['auth/isAdmin']) next();
-  else next({ name: 'notFound' });
+  else router.push({ name: 'notFound' });
 }

@@ -1,4 +1,4 @@
-import { MiddlewareDataInterface } from '@/router';
+import router, { MiddlewareDataInterface } from '@/router';
 
 export default function auth({ to, next, store }: MiddlewareDataInterface): void {
   const loginQuery = { path: '/login', query: { redirect: to.fullPath } };
@@ -7,8 +7,8 @@ export default function auth({ to, next, store }: MiddlewareDataInterface): void
     next();
   } else {
     store.dispatch('auth/getAuthUser').then(() => {
-      if (!store.getters['auth/authUser']) next(loginQuery);
-      else next();
+      if (!store.getters['auth/authUser']) router.push(loginQuery);
+      else { next(); }
     });
   }
 }
