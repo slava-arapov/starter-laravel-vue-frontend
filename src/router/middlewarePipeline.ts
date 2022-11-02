@@ -3,7 +3,7 @@ import { Store } from 'vuex';
 import { StoreState } from '@/store';
 import { MiddlewareDataInterface } from '@/router/index';
 
-declare interface Context {
+export interface Context {
   to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext, store: Store<StoreState>
 }
 
