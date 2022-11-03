@@ -30,12 +30,12 @@
       />
 
       <v-text-field
-        v-model="passwordConfirm"
+        v-model="confirmPassword"
         :append-icon="showPass ? mdiIcons.mdiEye : mdiIcons.mdiEyeOff"
         label="Confirm Password"
         :type="showPass ? 'text' : 'password'"
         name="confirm-password"
-        :error-messages="passwordConfirmErrors"
+        :error-messages="confirmPasswordErrors"
         required
         @click:append="showPass = !showPass"
       />
@@ -83,7 +83,7 @@ const { value: email, errors: emailErrors } = useField('email', 'required|email'
 const { value: password, errors: passwordErrors } = useField('password', 'required', {
   initialValue: ''
 });
-const { value: passwordConfirm, errors: passwordConfirmErrors } = useField('confirm-password', 'required|confirmed:@password', {
+const { value: confirmPassword, errors: confirmPasswordErrors } = useField('confirm-password', 'required|confirmed:@password', {
   initialValue: ''
 });
 
@@ -96,7 +96,7 @@ function resetPassword() {
   const payload = {
     email: email.value,
     password: password.value,
-    password_confirmation: passwordConfirm.value,
+    password_confirmation: confirmPassword.value,
     token: (typeof route.query.token === 'string') ? route.query.token : ''
   };
   AuthService.resetPassword(payload)
