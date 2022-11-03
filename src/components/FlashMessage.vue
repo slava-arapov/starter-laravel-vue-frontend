@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="message || error">
     <transition-group name="fade">
       <p
         v-if="message"
