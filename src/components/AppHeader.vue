@@ -7,7 +7,7 @@
       <div class="d-flex align-center">
         <router-link to="/">
           <v-img
-            alt="Vuetify Logo"
+            alt="Website Logo"
             class="ms-4 me-2"
             contain
             src="@/assets/logo.svg"
@@ -17,7 +17,7 @@
         </router-link>
         <router-link to="/">
           <v-img
-            alt="Vuetify Name"
+            alt="Website Name"
             class="shrink mt-1 hidden-sm-and-down"
             contain
             min-width="150"
@@ -31,6 +31,7 @@
       <v-btn
         v-if="authUser"
         to="/dashboard"
+        data-testid="dashboard-button"
       >
         <span>Dashboard</span>
       </v-btn>
@@ -49,6 +50,7 @@
 
       <v-menu
         v-if="authUser"
+        open-on-click
         open-on-hover
         bottom
         left
@@ -58,6 +60,7 @@
             dark
             elevation="0"
             v-bind="props"
+            data-testid="user-menu-button"
           >
             <v-img
               v-if="authUser?.avatar"
@@ -74,11 +77,13 @@
         <v-list>
           <v-list-item
             to="/user"
+            data-testid="settings-button"
           >
             <v-list-item-title>Settings</v-list-item-title>
           </v-list-item>
           <v-list-item
             @click="logout"
+            data-testid="logout-button"
           >
             <v-list-item-title>
               Logout
@@ -90,6 +95,7 @@
       <v-btn
         v-else
         to="/login"
+        data-testid="login-button"
       >
         <span>Login</span>
       </v-btn>
