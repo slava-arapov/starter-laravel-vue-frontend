@@ -7,7 +7,7 @@ export default mergeConfig(viteConfig, defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['/tests/setupVuetify.js'],
+    setupFiles: ['/tests/setup.js', '/tests/setupVuetify.js'],
     deps: {
       inline: ['vuetify']
     },

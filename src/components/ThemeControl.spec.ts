@@ -1,7 +1,7 @@
 import matchers from '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/vue';
 import ThemeControl from './ThemeControl.vue';
-import { describe, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { key, store } from '@/store';
 import vuetify from '@/plugins/vuetify';
 
