@@ -56,13 +56,14 @@ describe('AppHeader', async () => {
     expect(getByTestId('logout-button')).toBeInTheDocument();
   });
 
-  test('Hides dashboard, user menu, settings, logout buttons for guest', async () => {
+  test('Hides dashboard, users, user menu, settings, logout buttons for guest', async () => {
     const store = createStore<StoreState>({
       state: {
         route: null
       } as StoreState,
       getters: {
-        'auth/authUser': () => undefined
+        'auth/authUser': () => undefined,
+        'auth/isAdmin': () => false
       }
     });
 
@@ -73,6 +74,7 @@ describe('AppHeader', async () => {
     });
 
     expect(queryByTestId('dashboard-button')).not.toBeInTheDocument();
+    expect(queryByTestId('users-button')).not.toBeInTheDocument();
     expect(queryByTestId('user-menu-button')).not.toBeInTheDocument();
     expect(queryByTestId('settings-button')).not.toBeInTheDocument();
     expect(queryByTestId('logout-button')).not.toBeInTheDocument();
@@ -96,16 +98,160 @@ describe('AppHeader', async () => {
 
     expect(queryByTestId('login-button')).toBeInTheDocument();
   });
+  
+  test('Displays users button for admin', async () => {
+    const store = createStore<StoreState>({
+      state: {
+        route: null
+      } as StoreState,
+      getters: {
+        'auth/authUser': () => ({
+          id: 5,
+          name: 'John Doe',
+          email: 'jd@gmail.com',
+          email_verified_at: '123',
+          isAdmin: true,
+          avatar: null
+        }),
+        'auth/isAdmin': () => true
+      }
+    });
+
+    const { getByTestId } = render(AppHeaderWrapped, {
+      global: {
+        plugins: [[store, key], router, vuetify]
+      }
+    });
+
+    expect(getByTestId('users-button')).toBeInTheDocument();
+  });
+
+  test('Hides users button for not admins', async () => {
+    const store = createStore<StoreState>({
+      state: {
+        route: null
+      } as StoreState,
+      getters: {
+        'auth/authUser': () => ({
+          id: 5,
+          name: 'John Doe',
+          email: 'jd@gmail.com',
+          email_verified_at: '123',
+          isAdmin: false,
+          avatar: null
+        }),
+        'auth/isAdmin': () => false
+      }
+    });
+
+    const { queryByTestId } = render(AppHeaderWrapped, {
+      global: {
+        plugins: [[store, key], router, vuetify]
+      }
+    });
+
+    expect(queryByTestId('users-button')).not.toBeInTheDocument();
+  });
+  
+  test('Displays avatar for authorized user', async () => {
+    const avatarPath = '/path/to/avatar.jpg';
+    const store = createStore<StoreState>({
+      state: {
+        route: null
+      } as StoreState,
+      getters: {
+        'auth/authUser': () => ({
+          id: 5,
+          name: 'John Doe',
+          email: 'jd@gmail.com',
+          email_verified_at: '123',
+          isAdmin: false,
+          avatar: avatarPath
+        }),
+        'auth/isAdmin': () => false
+      }
+    });
+
+    const { getByTestId } = render(AppHeaderWrapped, {
+      global: {
+        plugins: [[store, key], router, vuetify]
+      }
+    });
+
+    const userAvatarElem = getByTestId('user-avatar');
+
+    const imgElem = userAvatarElem.querySelector('img');
+
+    const imgSrc = process.env['VITE_APP_API_URL'] + avatarPath;
+
+    expect(getByTestId('user-avatar')).toBeInTheDocument();
+    expect(imgElem?.src).toBe(imgSrc);
+  });
+
+  test('Hides avatar for user without avatar', async () => {
+    const store = createStore<StoreState>({
+      state: {
+        route: null
+      } as StoreState,
+      getters: {
+        'auth/authUser': () => ({
+          id: 5,
+          name: 'John Doe',
+          email: 'jd@gmail.com',
+          email_verified_at: '123',
+          isAdmin: false,
+          avatar: null
+        }),
+        'auth/isAdmin': () => false
+      }
+    });
+
+    const { queryByTestId } = render(AppHeaderWrapped, {
+      global: {
+        plugins: [[store, key], router, vuetify]
+      }
+    });
+
+    expect(queryByTestId('user-avatar')).not.toBeInTheDocument();
+  });
+  
+  test('Displays authorized user name', async () => {
+    const userName = 'John Doe';
+
+    const store = createStore<StoreState>({
+      state: {
+        route: null
+      } as StoreState,
+      getters: {
+        'auth/authUser': () => ({
+          id: 5,
+          name: userName,
+          email: 'jd@gmail.com',
+          email_verified_at: '123',
+          isAdmin: false,
+          avatar: null
+        }),
+        'auth/isAdmin': () => false
+      }
+    });
+
+    const { getByText } = render(AppHeaderWrapped, {
+      global: {
+        plugins: [[store, key], router, vuetify]
+      }
+    });
+
+    expect(getByText(userName)).toBeInTheDocument();
+  });
 });
 
 // Elements to test
 /*
   + v-if="authUser"
-  - v-if="isAdmin"
-  - v-if="authUser?.avatar"
-  - :alt="authUser?.name + ' avatar'"
-  - :src="apiUrl+authUser?.avatar"
-  - authUser?.name
+  + v-if="isAdmin"
+  + v-if="authUser?.avatar"
+  + :src="apiUrl+authUser?.avatar"
+  + authUser?.name
   - @click="logout"
   - :icon="mdiIcons.mdiLogout"
  */

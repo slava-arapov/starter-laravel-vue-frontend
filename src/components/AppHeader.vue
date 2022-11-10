@@ -38,6 +38,7 @@
       <v-btn
         v-if="isAdmin"
         to="/users"
+        data-testid="users-button"
       >
         <span>Users</span>
       </v-btn>
@@ -69,6 +70,7 @@
               aspect-ratio="1"
               class="shrink mr-2 hidden-sm-and-down grey lighten-2 rounded-circle"
               min-width="30"
+              data-testid="user-avatar"
             />
             {{ authUser?.name }}
           </v-btn>
