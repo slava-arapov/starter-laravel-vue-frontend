@@ -1,6 +1,6 @@
 import matchers from '@testing-library/jest-dom';
 import AppHeader from './AppHeader.vue';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/vue';
 import { key, StoreState } from '@/store';
 import vuetify from '@/plugins/vuetify';
@@ -243,6 +243,45 @@ describe('AppHeader', async () => {
 
     expect(getByText(userName)).toBeInTheDocument();
   });
+  
+  test('Logouts by clicking Logout button', async () => {
+    const logout = vi.fn(() => 0);
+
+    const store = createStore<StoreState>({
+      state: {
+        route: null
+      } as StoreState,
+      actions: {
+        'auth/logout': logout
+      },
+      getters: {
+        'auth/authUser': () => ({
+          id: 5,
+          name: 'John Doe',
+          email: 'jd@gmail.com',
+          email_verified_at: '123',
+          isAdmin: false,
+          avatar: null
+        })
+      }
+    });
+
+    const { getByTestId, } = render(AppHeaderWrapped, {
+      global: {
+        plugins: [[store, key], router, vuetify]
+      }
+    });
+
+    const menuButtonElement = getByTestId('user-menu-button');
+
+    await fireEvent.click(menuButtonElement);
+
+    const logoutButtonElement = getByTestId('logout-button');
+
+    await fireEvent.click(logoutButtonElement);
+
+    expect(logout).toBeCalled();
+  });
 });
 
 // Elements to test
@@ -252,6 +291,5 @@ describe('AppHeader', async () => {
   + v-if="authUser?.avatar"
   + :src="apiUrl+authUser?.avatar"
   + authUser?.name
-  - @click="logout"
-  - :icon="mdiIcons.mdiLogout"
+  + @click="logout"
  */
