@@ -21,7 +21,7 @@
         color="info"
         type="submit"
         :disabled="!file || !form.meta.valid"
-        small
+        size="small"
       >
         Upload
       </v-btn>

@@ -22,7 +22,7 @@
               class="ml-2 mt-5"
               to="/user"
               outlined
-              small
+              size="small"
             >
               View Profile
             </v-btn>
@@ -74,7 +74,7 @@
             class="ml-2 mt-5"
             href="https://github.com/garethredfern/laravelvue-spa"
             outlined
-            small
+            size="small"
           >
             github.com
           </v-btn>
@@ -104,7 +104,7 @@
             class="ml-2 mt-5"
             href="https://laravelvuespa.com"
             outlined
-            small
+            size="small"
           >
             laravelvuespa.com
           </v-btn>
@@ -112,7 +112,7 @@
             class="ml-2 mt-5"
             href="https://github.com/garethredfern/laravelvue-spa"
             outlined
-            small
+            size="small"
           >
             github.com
           </v-btn>

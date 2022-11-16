@@ -9,7 +9,7 @@
       <v-btn
         title="Dark Theme"
         :value="'dark'"
-        small
+        size="small"
       >
         <v-icon
           :icon="mdiIcons.mdiWeatherNight"
@@ -19,7 +19,7 @@
       <v-btn
         title="System Theme"
         :value="'system'"
-        small
+        size="small"
       >
         <v-icon
           :icon="mdiIcons.mdiThemeLightDark"
@@ -29,7 +29,7 @@
       <v-btn
         title="Light Theme"
         :value="'light'"
-        small
+        size="small"
       >
         <v-icon
           :icon="mdiIcons.mdiWhiteBalanceSunny"

@@ -6,7 +6,7 @@
         type="submit"
         class="ml-2"
         outlined
-        small
+        size="small"
       >
         Verify Email
       </v-btn>

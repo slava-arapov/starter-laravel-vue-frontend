@@ -26,7 +26,7 @@
         color="info"
         type="submit"
         :disabled="!form.meta.valid"
-        small
+        size="small"
       >
         Update
       </v-btn>
