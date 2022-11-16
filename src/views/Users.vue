@@ -1,5 +1,13 @@
 <template>
   <div class="p-5">
+    <transition name="fade">
+      <FlashMessage
+        v-if="error || message"
+        key="error"
+        :message="message"
+        :error="error"
+      />
+    </transition>
     <transition
       name="fade"
       mode="out-in"
@@ -17,6 +25,9 @@
             </th>
             <th class="text-left">
               Email
+            </th>
+            <th class="text-left">
+              Actions
             </th>
           </tr>
         </thead>
@@ -54,16 +65,18 @@
               />
               {{ user.email }}
             </td>
+            <td>
+              <v-btn
+                color="red"
+                size="small"
+                @click="deleteUser(user.id)"
+              >
+                Delete
+              </v-btn>
+            </td>
           </tr>
         </tbody>
       </v-table>
-    </transition>
-    <transition name="fade">
-      <FlashMessage
-        v-if="error"
-        key="error"
-        :error="error"
-      />
     </transition>
     <transition name="fade">
       <BasePagination
@@ -82,7 +95,7 @@
 import { useStore } from '@/store';
 import FlashMessage from '@/components/FlashMessage.vue';
 import BasePagination from '@/components/BasePagination.vue';
-import { useRoute } from 'vue-router';
+import { RouteLocationNormalized, useRoute } from 'vue-router';
 import { computed, watch } from 'vue';
 import type { Ref } from 'vue';
 import { mdiAccountCircle, mdiEmail } from '@mdi/js';
@@ -101,16 +114,29 @@ const apiUrl: Ref<string | null> = import.meta.env.VITE_APP_API_URL;
 
 const loading = computed(() => store.getters['user/loading']);
 const error = computed(() => store.getters['user/error']);
+const message = computed(() => store.getters['user/message']);
 const users = computed((): User[] | null => store.getters['user/users']);
 const meta = computed((): Meta | null => store.getters['user/meta']);
 const links = computed(() => store.getters['user/links']);
 
-watch(() => route, (to) => {
-  const currentPage = (typeof to.query.page === 'string') ? to.query.page : '1';
+function getUsers(route: RouteLocationNormalized) {
+  const currentPage = (typeof route.query.page === 'string') ? route.query.page : '1';
 
   store.dispatch('user/getUsers', parseInt(currentPage)).then(() => {
-    to.params.page = currentPage;
+    route.params.page = currentPage;
   });
+}
+
+watch(() => route, (to) => {
+  getUsers(to);
 }, { flush: 'pre', immediate: true, deep: true });
+
+function deleteUser(id: number) {
+  console.log(id);
+  console.log(route.query);
+
+  store.dispatch('user/deleteUser', id)
+    .then(() => getUsers(route));
+}
 
 </script>

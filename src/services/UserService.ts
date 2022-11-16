@@ -22,6 +22,9 @@ export default {
   getUser(userId: number): Promise<AxiosResponse<User>> {
     return API.apiClient.get(`/users/${userId}`);
   },
+  deleteUser(userId: number): Promise<AxiosResponse<User>> {
+    return API.apiClient.delete(`/users/${userId}`);
+  },
   getUsers(page: number): Promise<AxiosResponse<Users>> {
     return API.apiClient.get(`/users/?page=${page}`);
   },
