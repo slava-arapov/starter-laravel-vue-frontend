@@ -50,7 +50,7 @@ interface ErrorDictionary {
 
 interface Props {
   message?: string | null,
-  error?: ErrorDictionary | string /* | string[] | Error */ | null
+  error?: ErrorDictionary | string | null
 }
 
 const props = defineProps<Props>();

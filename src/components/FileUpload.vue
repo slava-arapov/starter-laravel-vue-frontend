@@ -37,10 +37,10 @@
 import { reactive, ref } from 'vue';
 import type { Ref } from 'vue';
 import { getErrorDictionary } from '@/utils/helpers';
-import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import FileService from '@/services/FileService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
+import { useFlashMessage } from '@/composables/useFlashMessage';
 
 interface Props {
   fileTypes?: Array<string>,
@@ -64,10 +64,8 @@ const form = reactive(useForm());
 const { value: file, errors: fileErrors, handleChange, handleBlur } = useField<Blob | null>('file', 'required|image', {
   initialValue: null
 });
-// some lints
 
-const message: Ref<string | null> = ref(null);
-const error: Ref<ErrorDictionary | null> = ref(null);
+const { message, error } = useFlashMessage();
 
 const input: Ref<HTMLFormElement | null> = ref(null);
 

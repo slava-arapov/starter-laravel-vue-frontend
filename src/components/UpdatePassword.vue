@@ -57,13 +57,12 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import type { Ref } from 'vue';
 import { getErrorDictionary } from '@/utils/helpers';
-import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
+import { useFlashMessage } from '@/composables/useFlashMessage';
 
 const mdiIcons = {
   mdiEye,
@@ -84,8 +83,7 @@ const { value: confirmPassword, errors: confirmPasswordErrors } = useField('conf
   initialValue: ''
 });
 
-const error: Ref<ErrorDictionary | null> = ref(null);
-const message: Ref<string | null> = ref(null);
+const { message, error } = useFlashMessage();
 
 function updatePassword() {
   error.value = null;

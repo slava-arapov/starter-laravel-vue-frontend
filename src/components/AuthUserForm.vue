@@ -39,14 +39,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
-import type { Ref } from 'vue';
+import { computed, onMounted, reactive } from 'vue';
 import { useStore } from '@/store';
 import { getErrorDictionary } from '@/utils/helpers';
-import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
+import { useFlashMessage } from '@/composables/useFlashMessage';
 
 const store = useStore();
 
@@ -59,8 +58,7 @@ const { value: email, errors: emailErrors } = useField('email', 'required|email'
   initialValue: ''
 });
 
-const error: Ref<ErrorDictionary | null> = ref(null);
-const message: Ref<string | null> = ref(null);
+const { message, error } = useFlashMessage();
 
 const authUser = computed(() => store.getters['auth/authUser']);
 

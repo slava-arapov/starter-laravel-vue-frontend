@@ -44,15 +44,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import type { Ref } from 'vue';
+import { reactive } from 'vue';
 import { getErrorDictionary } from '@/utils/helpers';
-import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
 import { useStore } from '@/store';
 import { useRouter } from 'vue-router';
+import { useFlashMessage } from '@/composables/useFlashMessage';
 
 const store = useStore();
 const router = useRouter();
@@ -66,7 +65,7 @@ const { value: password, errors: passwordErrors } = useField('password', 'requir
   initialValue: ''
 });
 
-const error: Ref<ErrorDictionary | null> = ref(null);
+const { error } = useFlashMessage();
 
 async function login(): Promise<void> {
   const payload = {

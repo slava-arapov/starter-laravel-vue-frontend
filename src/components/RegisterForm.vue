@@ -57,14 +57,13 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import type { Ref } from 'vue';
 import { getErrorDictionary } from '@/utils/helpers';
-import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useForm, useField } from 'vee-validate';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 import { useRouter } from 'vue-router';
+import { useFlashMessage } from '@/composables/useFlashMessage';
 
 const router = useRouter();
 
@@ -90,7 +89,7 @@ const { value: confirmPassword, errors: confirmPasswordErrors } = useField('conf
   initialValue: ''
 });
 
-const error: Ref<ErrorDictionary | null> = ref(null);
+const { error } = useFlashMessage();
 
 function registerUser() {
   error.value = null;

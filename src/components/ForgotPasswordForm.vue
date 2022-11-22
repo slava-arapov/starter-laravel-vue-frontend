@@ -32,13 +32,12 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import type { Ref } from 'vue';
+import { reactive } from 'vue';
 import { getErrorDictionary } from '@/utils/helpers';
-import { ErrorDictionary } from '@/interfaces/ErrorDictionary';
 import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
+import { useFlashMessage } from '@/composables/useFlashMessage';
 
 const form = reactive(useForm());
 
@@ -46,8 +45,7 @@ const { value: email, errors: emailErrors } = useField('email', 'required|email'
   initialValue: ''
 });
 
-const error: Ref<ErrorDictionary | null> = ref(null);
-const message: Ref<string | null> = ref(null);
+const { message, error } = useFlashMessage();
 
 async function forgotPassword(): Promise<void> {
   error.value = null;
