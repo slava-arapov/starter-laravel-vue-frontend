@@ -53,8 +53,6 @@
         v-if="authUser"
         open-on-click
         open-on-hover
-        bottom
-        left
       >
         <template #activator="{ props }">
           <v-btn

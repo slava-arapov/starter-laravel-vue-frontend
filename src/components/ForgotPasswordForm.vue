@@ -38,6 +38,7 @@ import AuthService from '@/services/AuthService';
 import FlashMessage from '@/components/FlashMessage.vue';
 import { useField, useForm } from 'vee-validate';
 import { useFlashMessage } from '@/composables/useFlashMessage';
+import axios from 'axios';
 
 const form = reactive(useForm());
 
@@ -60,9 +61,9 @@ async function forgotPassword(): Promise<void> {
   } catch (e) {
     console.log(e);
 
-    if (e.response.data.errors) {
+    if (axios.isAxiosError(e) && e.response?.data?.errors) {
       form.setErrors(e.response.data.errors);
-    } else {
+    } else if (e instanceof Error) {
       error.value = getErrorDictionary(e);
     }
   }

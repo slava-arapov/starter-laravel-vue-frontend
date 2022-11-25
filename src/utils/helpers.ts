@@ -26,7 +26,7 @@ export const getErrorDictionary = (error: Error | AxiosError<ServerData>): Error
     }
 
     if (!error.response?.data) {
-      console.error(`API ${error.config.url} not found`);
+      console.error(`API ${error.config?.url} not found`);
     }
 
     if (inDevelopmentEnv && error.response) {

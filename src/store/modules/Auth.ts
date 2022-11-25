@@ -2,7 +2,7 @@ import router from '@/router';
 import { getErrorDictionary } from '@/utils/helpers';
 import AuthService from '@/services/AuthService';
 import { Commit } from 'vuex';
-import { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { StoreState } from '@/store';
 
 export const namespaced = true;
@@ -81,7 +81,9 @@ export const actions = {
       }
     } catch (error) {
       commit('SET_USER', null);
-      commit('SET_ERROR', getErrorDictionary(error));
+      if (error instanceof Error || axios.isAxiosError(error)) {
+        commit('SET_ERROR', getErrorDictionary(error));
+      }
     }
     commit('SET_LOADING', false);
   },

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
-import { store, StoreState } from '@/store/index.ts';
+import { store, StoreState } from '@/store';
 import auth from '@/middleware/auth';
 import admin from '@/middleware/admin';
 import guest from '@/middleware/guest';

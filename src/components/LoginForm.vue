@@ -52,6 +52,7 @@ import { useField, useForm } from 'vee-validate';
 import { useStore } from '@/store';
 import { useRouter } from 'vue-router';
 import { useFlashMessage } from '@/composables/useFlashMessage';
+import axios from 'axios';
 
 const store = useStore();
 const router = useRouter();
@@ -90,9 +91,9 @@ async function login(): Promise<void> {
   } catch (e) {
     console.log(e);
 
-    if (e.response.data && e.response.data.errors) {
+    if (axios.isAxiosError(e) && e.response?.data?.errors) {
       form.setErrors(e.response.data.errors);
-    } else {
+    } else if (e instanceof Error) {
       error.value = getErrorDictionary(e);
     }
   }
