@@ -75,7 +75,7 @@ const errorKeys = computed(() => {
 });
 
 function capitalize(value: string) {
-  return value.replace('_', ' ').split(' ').map(value => value[0].toUpperCase() + value.substr(1)).join(' ');
+  return value.replace('_', ' ').split(' ').map(value => value[0].toUpperCase() + value.substring(1)).join(' ');
 }
 
 </script>
