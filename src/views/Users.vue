@@ -1,13 +1,23 @@
 <template>
   <div class="p-5">
-    <transition name="fade">
-      <FlashMessage
-        v-if="error || message"
-        key="error"
-        :message="message"
-        :error="error"
+    <v-row
+      justify="space-between"
+      class="mb-2"
+    >
+      <div>
+        <transition name="fade">
+          <FlashMessage
+            v-if="error || message"
+            key="error"
+            :message="message"
+            :error="error"
+          />
+        </transition>
+      </div>
+      <UserFormDialog
+        @userCreated="getUsers(route); showUserCreatedMessage()"
       />
-    </transition>
+    </v-row>
     <transition
       name="fade"
       mode="out-in"
@@ -17,7 +27,10 @@
         key="loading"
         message="loading..."
       />
-      <v-table v-else>
+      <v-table
+        class="mb-2"
+        v-else
+      >
         <thead>
           <tr>
             <th class="text-left">
@@ -101,6 +114,7 @@ import type { Ref } from 'vue';
 import { mdiAccountCircle, mdiEmail } from '@mdi/js';
 import { Meta } from '@/interfaces/Meta';
 import { User } from '@/interfaces/User';
+import UserFormDialog from '@/components/UserFormDialog.vue';
 
 const store = useStore();
 const route = useRoute();
@@ -137,6 +151,11 @@ function deleteUser(id: number) {
 
   store.dispatch('user/deleteUser', id)
     .then(() => getUsers(route));
+}
+
+function showUserCreatedMessage(ms = 3000) {
+  store.commit('user/SET_MESSAGE', 'User created');
+  setTimeout(() => store.commit('user/SET_MESSAGE', null), ms);
 }
 
 </script>
