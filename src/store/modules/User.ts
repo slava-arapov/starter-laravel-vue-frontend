@@ -88,7 +88,7 @@ export const actions = {
         commit('SET_ERROR', getErrorDictionary(error));
       });
     commit('SET_LOADING', false);
-  },
+  }
 };
 
 export const getters = {

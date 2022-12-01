@@ -1,46 +1,44 @@
 <template>
-  <div>
-    <v-form
-      @submit.prevent="login"
-    >
-      <v-text-field
-        v-model="email"
-        label="Email"
-        type="email"
-        name="email"
-        autocomplete="email"
-        :error-messages="emailErrors"
-        required
-      />
+  <v-form
+    @submit.prevent="login"
+  >
+    <v-text-field
+      v-model="email"
+      label="Email"
+      type="email"
+      name="email"
+      autocomplete="email"
+      :error-messages="emailErrors"
+      required
+    />
 
-      <v-text-field
-        v-model="password"
-        label="Password"
-        type="password"
-        name="password"
-        :error-messages="passwordErrors"
-        required
-      />
+    <v-text-field
+      v-model="password"
+      label="Password"
+      type="password"
+      name="password"
+      :error-messages="passwordErrors"
+      required
+    />
 
-      <div class="d-flex justify-between align-center pt-2">
-        <router-link
-          to="/forgot-password"
-          class="text-sm base-link pr-3"
-        >
-          Forgot your password?
-        </router-link>
-        <v-btn
-          color="info"
-          type="submit"
-          :disabled="!form.meta.valid"
-        >
-          Login
-        </v-btn>
-      </div>
+    <div class="d-flex justify-between align-center pt-2">
+      <router-link
+        to="/forgot-password"
+        class="text-sm base-link pr-3"
+      >
+        Forgot your password?
+      </router-link>
+      <v-btn
+        color="info"
+        type="submit"
+        :disabled="!form.meta.valid"
+      >
+        Login
+      </v-btn>
+    </div>
 
-      <FlashMessage :error="error" />
-    </v-form>
-  </div>
+    <FlashMessage :error="error" />
+  </v-form>
 </template>
 
 <script setup lang="ts">
