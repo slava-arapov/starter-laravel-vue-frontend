@@ -25,6 +25,9 @@ export default {
   createUser(payload: {name: string | null, email: string | null, password: string | null}): Promise<AxiosResponse<User>> {
     return API.apiClient.post('/users/', payload);
   },
+  updateUser(payload: {id: number, name: string, email: string, password?: string}): Promise<AxiosResponse<User>> {
+    return API.apiClient.put(`/users/${payload.id}`, payload);
+  },
   deleteUser(userId: number): Promise<AxiosResponse<User>> {
     return API.apiClient.delete(`/users/${userId}`);
   },

@@ -9,14 +9,15 @@ The starter is decoupled into two parts:
 ## Features and Dependencies
 * Vue 3 (Options API), Vue Router 4, Vuex 4, ESLint, Vite
 * Vue Components with TypeScript declarations and [vue-tsc](https://github.com/johnsoncodehk/volar/tree/master/vue-language-tools/vue-tsc) installed
-* Unit test ([Vitest](https://vitest.dev))
+* Unit tests ([Vitest](https://vitest.dev))
 * Vuetify 3 Beta
 * VeeValidate 4
 * Material Design Icons — [SVG custom import](https://vuetifyjs.com/en/features/icon-fonts/#material-design-icons-js-svg)
 * User Authentication and Authorization using Laravel Sanctum 
 * Login, Register, Email Verification and Password Reset using Laravel Fortify
 * Administration Dashboard
-* Basic User Update and avatar upload
+* Users CRUD
+* Basic current User Update and avatar upload
 * Auth, Guest, Admin Middleware
 * Pagination
 * Dark/Light/System Theme Switch

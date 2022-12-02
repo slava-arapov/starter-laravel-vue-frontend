@@ -15,7 +15,8 @@
         </transition>
       </div>
       <UserFormDialog
-        @userCreated="getUsers(route); showUserCreatedMessage()"
+        action="create"
+        @userCreated="getUsers(route); showMessage('User created')"
       />
     </v-row>
     <transition
@@ -79,6 +80,12 @@
               {{ user.email }}
             </td>
             <td>
+              <UserFormDialog
+                action="update"
+                :user="user"
+                button-size="small"
+                @userUpdated="getUsers(route); showMessage('User updated')"
+              />
               <v-btn
                 color="red"
                 size="small"
@@ -153,8 +160,8 @@ function deleteUser(id: number) {
     .then(() => getUsers(route));
 }
 
-function showUserCreatedMessage(ms = 3000) {
-  store.commit('user/SET_MESSAGE', 'User created');
+function showMessage(text: string, ms = 3000) {
+  store.commit('user/SET_MESSAGE', text);
   setTimeout(() => store.commit('user/SET_MESSAGE', null), ms);
 }
 
