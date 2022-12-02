@@ -109,11 +109,11 @@ watch(dialog, () => {
 const form = reactive(useForm());
 
 const { value: name, errors: nameErrors } = useField('name', 'required', {
-  initialValue: props.user?.name ?? ''
+  initialValue: ''
 });
 
 const { value: email, errors: emailErrors } = useField('email', 'required|email', {
-  initialValue: props.user?.email ?? ''
+  initialValue: ''
 });
 
 const passwordRules = props.action === 'create' ? 'required' : '';
@@ -121,6 +121,8 @@ const passwordRules = props.action === 'create' ? 'required' : '';
 const { value: password, errors: passwordErrors } = useField('password', passwordRules, {
   initialValue: ''
 });
+
+resetFields();
 
 const { error } = useFlashMessage();
 
