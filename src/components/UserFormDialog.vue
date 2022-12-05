@@ -52,6 +52,12 @@
                 required
               />
 
+              <v-checkbox
+                v-model="isAdmin"
+                label="Is Admin"
+                name="is_admin"
+              />
+
               <FlashMessage :error="error" />
               <v-card-actions>
                 <v-btn
@@ -122,6 +128,8 @@ const { value: password, errors: passwordErrors } = useField('password', passwor
   initialValue: ''
 });
 
+const isAdmin = ref(false);
+
 resetFields();
 
 const { error } = useFlashMessage();
@@ -134,7 +142,8 @@ function createUser() {
   const payload = {
     name: name.value,
     email: email.value,
-    password: password.value
+    password: password.value,
+    isAdmin: isAdmin.value
   };
 
   UserService.createUser(payload)
@@ -160,7 +169,8 @@ function updateUser() {
     id: props.user.id,
     name: name.value,
     email: email.value,
-    password: password.value
+    password: password.value,
+    isAdmin: isAdmin.value
   };
 
   UserService.updateUser(payload)
@@ -181,6 +191,7 @@ function resetFields() {
   name.value = props.user?.name ?? '';
   email.value = props.user?.email ?? '';
   password.value = '';
+  isAdmin.value = props.user?.isAdmin ?? false;
 
   form.setErrors({});
 }

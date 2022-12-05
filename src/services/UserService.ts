@@ -22,10 +22,10 @@ export default {
   getUser(userId: number): Promise<AxiosResponse<User>> {
     return API.apiClient.get(`/users/${userId}`);
   },
-  createUser(payload: {name: string | null, email: string | null, password: string | null}): Promise<AxiosResponse<User>> {
+  createUser(payload: {name: string | null, email: string | null, password: string | null, isAdmin: boolean}): Promise<AxiosResponse<User>> {
     return API.apiClient.post('/users/', payload);
   },
-  updateUser(payload: {id: number, name: string, email: string, password?: string}): Promise<AxiosResponse<User>> {
+  updateUser(payload: {id: number, name: string, email: string, password?: string, isAdmin: boolean}): Promise<AxiosResponse<User>> {
     return API.apiClient.put(`/users/${payload.id}`, payload);
   },
   deleteUser(userId: number): Promise<AxiosResponse<User>> {
