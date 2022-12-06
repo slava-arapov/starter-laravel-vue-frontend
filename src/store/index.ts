@@ -9,6 +9,7 @@ import { SettingsState } from '@/store/modules/Settings';
 
 export interface StoreState {
   route: string | null,
+  loading: boolean,
   auth: AuthState,
   user: UserState,
   settings: SettingsState
@@ -18,11 +19,15 @@ export const key: InjectionKey<Store<StoreState>> = Symbol('store');
 
 export const store = createStore<StoreState>({
   state: {
-    route: null
+    route: null,
+    loading: false
   } as StoreState,
   mutations: {
     SET_ROUTE(state, route: string | null) {
       state.route = route;
+    },
+    SET_LOADING(state, loading: boolean) {
+      state.loading = loading;
     }
   },
   actions: {

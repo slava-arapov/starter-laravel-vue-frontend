@@ -143,8 +143,10 @@ const links = computed(() => store.getters['user/links']);
 function getUsers(route: RouteLocationNormalized) {
   const currentPage = (typeof route.query.page === 'string') ? route.query.page : '1';
 
+  store.commit('SET_LOADING', true);
   store.dispatch('user/getUsers', parseInt(currentPage)).then(() => {
     route.params.page = currentPage;
+    store.commit('SET_LOADING', false);
   });
 }
 

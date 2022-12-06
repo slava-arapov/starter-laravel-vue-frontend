@@ -97,12 +97,17 @@ router.beforeEach((to, from, next) => {
   const context = { to, from, next, store };
 
   store.commit('SET_ROUTE', to.matched[0].name);
+  store.commit('SET_LOADING', true);
 
   if (middleware) {
     next = middlewarePipeline(context, middleware, 0);
   }
 
   return next();
+});
+
+router.afterEach((to, from) => {
+  store.commit('SET_LOADING', false);
 });
 
 export default router;
