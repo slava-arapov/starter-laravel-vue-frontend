@@ -39,7 +39,8 @@
             :alt="authUser.name + ' avatar'"
             :src="apiUrl+authUser.avatar"
             aspect-ratio="1"
-            class="shrink grey lighten-2 rounded-circle "
+            class="shrink grey lighten-2 rounded-circle"
+            cover
             max-height="125"
             max-width="125"
           />

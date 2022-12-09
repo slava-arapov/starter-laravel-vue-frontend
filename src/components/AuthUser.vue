@@ -6,7 +6,6 @@
       <v-avatar
         size="36"
         class="mr-3"
-        tile
       >
         <v-img
           v-if="authUser?.avatar"
@@ -14,6 +13,7 @@
           :src="apiUrl+authUser?.avatar"
           aspect-ratio="1"
           class="shrink grey lighten-2 rounded-circle"
+          cover
           max-height="36"
           max-width="36"
         />

@@ -54,7 +54,6 @@
               <v-avatar
                 class="ma-3 d-sm-and-up-none"
                 size="32"
-                tile
               >
                 <v-img
                   v-if="user.avatar"
@@ -62,6 +61,7 @@
                   :src="apiUrl+user.avatar"
                   aspect-ratio="1"
                   class="shrink grey lighten-2 rounded-circle"
+                  cover
                   max-height="32"
                   max-width="32"
                 />

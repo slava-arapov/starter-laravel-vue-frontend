@@ -67,6 +67,7 @@
               :src="apiUrl+authUser?.avatar"
               aspect-ratio="1"
               class="shrink mr-2 hidden-sm-and-down grey lighten-2 rounded-circle"
+              cover
               min-width="30"
               data-testid="user-avatar"
             />
