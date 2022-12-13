@@ -1,71 +1,75 @@
 <template>
   <v-row>
     <v-col
-      sm="6"
-      md="4"
+      md="6"
+      lg="4"
       xl="3"
     >
       <v-card
         class="info d-flex flex-no-wrap justify-space-between"
+        height="100%"
         dark
       >
-        <div>
-          <v-card-title
-            class="text-h5"
-          >
-            {{ authUser?.name }}
-          </v-card-title>
-          <v-card-subtitle>signed in</v-card-subtitle>
-
-          <v-card-actions>
-            <v-btn
-              class="ml-2 mt-5"
-              to="/user"
-              outlined
-              size="small"
+        <div class="d-flex flex-no-wrap justify-space-between w-100">
+          <div>
+            <v-card-title
+              class="text-h5"
             >
-              View Profile
-            </v-btn>
-          </v-card-actions>
-        </div>
+              {{ authUser?.name }}
+            </v-card-title>
+            <v-card-subtitle>signed in</v-card-subtitle>
 
-        <v-avatar
-          class="ma-3 hidden-sm-and-down"
-          size="125"
-          tile
-        >
-          <v-img
-            v-if="authUser?.avatar"
-            :alt="authUser.name + ' avatar'"
-            :src="apiUrl+authUser.avatar"
-            aspect-ratio="1"
-            class="shrink grey lighten-2 rounded-circle"
-            cover
-            max-height="125"
-            max-width="125"
-          />
-          <v-icon
-            v-else
-            :icon="mdiIcons.mdiAccountCircle"
+            <v-card-actions>
+              <v-btn
+                class="ml-2 mt-5"
+                to="/user"
+                outlined
+                size="small"
+              >
+                View Profile
+              </v-btn>
+            </v-card-actions>
+          </div>
+
+          <v-avatar
+            class="ma-3"
             size="125"
-          />
-        </v-avatar>
+          >
+            <v-img
+              v-if="authUser?.avatar"
+              :alt="authUser.name + ' avatar'"
+              :src="apiUrl+authUser.avatar"
+              aspect-ratio="1"
+              class="shrink grey lighten-2 rounded-circle"
+              cover
+              max-height="125"
+              max-width="125"
+            />
+            <v-icon
+              v-else
+              :icon="mdiIcons.mdiAccountCircle"
+              size="125"
+            />
+          </v-avatar>
+        </div>
       </v-card>
     </v-col>
 
     <v-col
       sm="6"
-      md="4"
+      md="6"
+      lg="4"
       xl="3"
     >
       <v-card
         class="info"
+        height="100%"
         dark
       >
         <v-card-title
           class="text-h5"
         >
-          About Starter
+          About the Starter
         </v-card-title>
         <v-card-text>
           You can find information about dependencies and some docs at GitHub repository.
@@ -85,11 +89,13 @@
 
     <v-col
       sm="6"
-      md="4"
+      md="6"
+      lg="4"
       xl="3"
     >
       <v-card
         class="info"
+        height="100%"
         dark
       >
         <v-card-title
