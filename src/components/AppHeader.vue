@@ -10,7 +10,7 @@
             alt="Website Logo"
             class="ms-4 me-2"
             contain
-            src="@/assets/logo.svg"
+            :src="logoUrl"
             transition="scale-transition"
             width="40"
           />
@@ -108,8 +108,13 @@
 import { computed } from 'vue';
 import { useStore } from '@/store';
 import { mdiLogout } from '@mdi/js';
+import { useTheme } from 'vuetify';
+import logoUrlLight from '@/assets/logo.svg';
+import logoUrlDark from '@/assets/logo-dark.svg';
 
 const store = useStore();
+
+const theme = useTheme();
 
 const mdiIcons = {
   mdiLogout
@@ -118,6 +123,8 @@ const mdiIcons = {
 const apiUrl = import.meta.env.VITE_APP_API_URL;
 const authUser = computed(() => store.getters['auth/authUser']);
 const isAdmin = computed(() => store.getters['auth/isAdmin']);
+
+const logoUrl = computed(() => theme.global.name.value === 'light' ? logoUrlLight : logoUrlDark);
 
 function logout() {
   store.dispatch('auth/logout');
